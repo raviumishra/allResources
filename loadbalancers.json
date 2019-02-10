@@ -14,11 +14,11 @@
     },
     "variables": {
         "ilbArray": [
-            "ad00",
-            "gateway00",
-            "wasabi00",
-            "sql00",
-            "jumpbox00"
+            "ad001",
+            "gateway001",
+            "wasabi001",
+            "sql001",
+            "jumpbox001"
         ]
     },
     "resources": [
