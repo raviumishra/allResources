@@ -3,11 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "networkinterfaceName": {
-            "type": "string",
-            "allowedValues": [
-                "Yes",
-                "No"
-            ]
+            "type": "string"
         },
         "virtualmachineIPs": {
             "type": "array"

@@ -3,11 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "loadbalancerName": {
-            "type": "string",
-            "allowedValues": [
-                "Yes",
-                "No"
-            ]
+            "type": "string"
         },
         "InternalLoadBalancerIP": {
             "type": "array"
