@@ -2,21 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "nsgCount": {
-            "type": "int",
-            "maxValue": 1
-        },
-        "nicCount": {
-            "type": "int",
-            "maxValue": 1
-        },
-        "vmCount": {
-            "type": "int",
-            "maxValue": 1
-        },
-        "ResourceGroupLocation": {
-            "type": "string"
-        },
         "shortLocation": {
             "type": "string",
             "maxLength": 3,
@@ -67,16 +52,6 @@
                 "description": "(Product Specific) Space. 8 chars (OPTIONAL)"
             }
         },
-        "virtualNetworkResourceGroup": {
-            "type": "string"
-        },
-        "virtualNetworkName": {
-            "type": "string"
-        },
-        "SubnetName": {
-            "type": "string",
-            "defaultValue": "default"
-        },
         "AvailabilitySet": {
             "type": "string",
             "defaultValue": "No",
@@ -88,44 +63,22 @@
                 "description": "Select whether the VM should be in AvailabilitySet or not."
             }
         },
-        "InternalLoadBalancerIPs": {
-            "type": "array"
+        "virtualNetworkResourceGroup": {
+            "type": "string"
+        },
+        "virtualNetworkName": {
+            "type": "string"
+        },
+        "SubnetName": {
+            "type": "string",
+            "defaultValue": "default"
+        },
+        "LoadBalancerIPs": {
+            "type": "array",
+            "maxValue": 5
         },
         "virtualmachineIPs": {
             "type": "array"
-        },
-        "virtualMachineSize": {
-            "type": "string"
-        },
-        "numberOfDataDisks": {
-            "type": "int"
-        },
-        "DataDiskSize": {
-            "type": "int"
-        },
-        "omsWorkspaceResourceGroup": {
-            "type": "string"
-        },
-        "omsWorkspaceName": {
-            "type": "string"
-        },
-        "keyVaultResourceGroupName": {
-            "type": "string"
-        },
-        "keyvaultName": {
-            "type": "string"
-        },
-        "adminUsername": {
-            "type": "string"
-        },
-        "domainName": {
-            "type": "string"
-        },
-        "secret_DomainUserName": {
-            "type": "string"
-        },
-        "secret_DomainPassword": {
-            "type": "string"
         },
         "baseUri": {
             "type": "string"
@@ -143,7 +96,7 @@
         "omsResourceGroupName": "[toupper(concat('GAV-',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-',parameters('Tier_Name'),'-',parameters('Environment_Category'),'-',parameters('Role'),'-',parameters('Tenant'),'-','01','-',parameters('Custom')))]",
         "vnetID": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('virtualNetworkResourceGroup'),'/providers/Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'))]",
         "availabilitySetName": "[tolower(concat(parameters('Role'),'avset'))]",
-        "loadbalancerName": "[tolower(concat(parameters('Role'),'ilb'))]",
+        "loadbalancerName": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','ilb-','00'))]",
         "networkinterfaceName": "[tolower(concat(parameters('Role'),'ilb'))]",
         "StorageAccountName": "[tolower(concat(parameters('Application_Acronym'),parameters('shortlocation'),parameters('Tier_Name'),parameters('role'),'001'))]",
         "adResources": {
@@ -184,6 +137,11 @@
             "omsAgentTemplate": "[concat(parameters('baseUri'),'/sharedTemplates/master/omsAgent.json')]",
             "CustomScriptExtensionScriptFilePath": "[concat(parameters('baseUri'),'/SFTP/master/customScripts.ps1')]",
             "CustomScriptFileName": "customScripts.ps1"
+        },
+        "tempalteURLs": {
+            "availabilitySetTemplate": "[concat(parameters('baseUri'),'/allResources/master/AvailabilitySets.json')]",
+            "networkInterface": "[concat(parameters('baseUri'),'/allResources/master/networkInterface.json')]",
+            "loadbalancers": "[concat(parameters('baseUri'),'/allResources/master/loadbalancers.json')]"
         }
     },
     "resources": [
@@ -195,193 +153,63 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('sftpResources').nsgTemplate]",
+                    "uri": "[variables('tempalteURLs').availabilitySetTemplate]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "ResourceGroupLocation": {
-                        "value": "[parameters('ResourceGroupLocation')]"
+                    "AvailabilitySet": {
+                        "value": "[parameters('AvailabilitySet')]"
                     },
-                    "nsgCount": {
-                        "value": "[parameters('nsgCount')]"
-                    },
-                    "networkSecurityGroupName": {
-                        "value": "[variables('sftpResources').networkSecurityGroupName]"
+                    "availabilitySetName": {
+                        "value": "[variables('availabilitySetName')]"
                     }
                 }
             }
-        }
-        
+        },
         {
             "type": "Microsoft.Resources/deployments",
-            "name": "SFTPNSG",
+            "name": "networkInterface",
             "apiVersion": "2018-05-01",
             "dependsOn": [],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('sftpResources').nsgTemplate]",
+                    "uri": "[variables('tempalteURLs').networkInterface]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "ResourceGroupLocation": {
-                        "value": "[parameters('ResourceGroupLocation')]"
+                    "networkinterfaceName": {
+                        "value": "[variables('networkinterfaceName')]"
                     },
-                    "nsgCount": {
-                        "value": "[parameters('nsgCount')]"
+                    "virtualmachineIPs": {
+                        "value": "[parameters('virtualmachineIPs')]"
                     },
-                    "networkSecurityGroupName": {
-                        "value": "[variables('sftpResources').networkSecurityGroupName]"
+                    "SubnetRef": {
+                        "value": "[variables('adResources').SubnetRef]"
                     }
                 }
             }
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "name": "StorageAccount",
+            "name": "loadbalancers",
             "apiVersion": "2018-05-01",
-            "dependsOn": [
-                "SFTPNSG"
-            ],
+            "dependsOn": [],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('TemplateURLs').StorageAccountTemplate]",
+                    "uri": "[variables('tempalteURLs').availabilitySetTemplate]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "ResourceGroupLocation": {
-                        "value": "[parameters('ResourceGroupLocation')]"
+                    "loadbalancerName": {
+                        "value": "[variables('loadbalancerName')]"
                     },
-                    "StorageAccountName": {
-                        "value": "[variables('resourcenames').StorageAccountName]"
+                    "InternalLoadBalancerIP": {
+                        "value": "[parameters('LoadBalancerIPs')]"
                     },
-                    "StorageAccountType": {
-                        "value": "[variables('StorageAccountType')]"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "name": "SFTPVM",
-            "apiVersion": "2018-05-01",
-            "dependsOn": [
-                "StorageAccount"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('templateurls').SFTPVMTemplate]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vmCount": {
-                        "value": "[parameters('vmCount')]"
-                    },
-                    "nicCount": {
-                        "value": "[parameters('nicCount')]"
-                    },
-                    "subnet1Ref": {
-                        "value": "[variables('subnet1Ref')]"
-                    },
-                    "privateIpAddress": {
-                        "value": "[parameters('privateIpAddress')]"
-                    },
-                    "virtualmachineName": {
-                        "value": "[variables('resourcenames').virtualmachineName]"
-                    },
-                    "AvailabilitySet": {
-                        "value": "[parameters('AvailabilitySet')]"
-                    },
-                    "availabilitySetName": {
-                        "value": "[variables('resourcenames').availabilitySetName]"
-                    },
-                    "virtualMachineSize": {
-                        "value": "[parameters('virtualMachineSize')]"
-                    },
-                    "StorageAccountType": {
-                        "value": "[variables('StorageAccountType')]"
-                    },
-                    "networkInterfaceName": {
-                        "value": "[variables('resourcenames').networkInterfaceName]"
-                    },
-                    "osDiskName": {
-                        "value": "[variables('resourcenames').osDiskName]"
-                    },
-                    "dataDiskName": {
-                        "value": "[variables('resourcenames').dataDiskName]"
-                    },
-                    "numberOfDataDisks": {
-                        "value": "[parameters('numberOfDataDisks')]"
-                    },
-                    "DataDiskSize": {
-                        "value": "[parameters('DataDiskSize')]"
-                    },
-                    "adminUsername": {
-                        "value": "[parameters('adminUsername')]"
-                    },
-                    "adminPassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(subscription().subscriptionId,  parameters('keyVaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('keyvaultName'))]"
-                            },
-                            "secretName": "[parameters('secret_DomainPassword')]"
-                        }
-                    },
-                    "omsWorkspaceResourceGroup": {
-                        "value": "[parameters('omsWorkspaceResourceGroup')]"
-                    },
-                    "omsWorkspaceName": {
-                        "value": "[parameters('omsWorkspaceName')]"
-                    },
-                    "CustomScriptExtensionScriptFilePath": {
-                        "value": "[variables('templateurls').CustomScriptExtensionScriptFilePath]"
-                    },
-                    "CustomScriptFileName": {
-                        "value": "[variables('TemplateURLs').CustomScriptFileName]"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "name": "domainJoin",
-            "apiVersion": "2018-05-01",
-            "dependsOn": [
-                "SFTPVM"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('templateurls').domainJoinTemplate]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vmCount": {
-                        "value": "[parameters('vmCount')]"
-                    },
-                    "virtualmachineName": {
-                        "value": "[variables('resourcenames').virtualmachineName]"
-                    },
-                    "domainName": {
-                        "value": "[parameters('domainName')]"
-                    },
-                    "DomainUserName": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(subscription().subscriptionId,  parameters('keyVaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('keyvaultName'))]"
-                            },
-                            "secretName": "[parameters('secret_DomainUserName')]"
-                        }
-                    },
-                    "DomainPassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(subscription().subscriptionId,  parameters('keyVaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('keyvaultName'))]"
-                            },
-                            "secretName": "[parameters('secret_DomainPassword')]"
-                        }
+                    "SubnetRef": {
+                        "value": "[variables('adResources').SubnetRef]"
                     }
                 }
             }
