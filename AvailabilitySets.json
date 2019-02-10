@@ -15,11 +15,11 @@
     },
     "variables": {
         "availabilitySetArray": [
-            "ad",
-            "sql",
-            "emsmgr",
-            "webapi",
-            "emsadmin"
+            "ad00",
+            "sql00",
+            "emsmgr00",
+            "webapi00",
+            "emsadmin00"
         ]
     },
     "resources": [

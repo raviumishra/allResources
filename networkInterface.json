@@ -14,12 +14,12 @@
     },
     "variables": {
         "nicArray": [
-            "pdc",
-            "bdc",
-            "sql01",
-            "sql02",
-            "emsmgr",
-            "sftp"
+            "pdc00",
+            "bdc00",
+            "sql00",
+            "sql00",
+            "emsmgr00",
+            "sftp00"
         ]
     },
     "resources": [
