@@ -1,0 +1,223 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "numberofSQLVMs": {
+            "type": "int",
+            "defaultValue": 1,
+            "allowedValues": [
+                1,
+                2
+            ]
+        },
+        "shortLocation": {
+            "type": "string",
+            "maxLength": 3,
+            "metadata": {
+                "description": "3 chars. E.g. East US - EU, West US - WU, East US 2 - EU2"
+            },
+            "defaultValue": "cu"
+        },
+        "Application_Acronym": {
+            "type": "string",
+            "maxLength": 3,
+            "metadata": {
+                "description": "3 chars e.g. nxt (Next Net), ems"
+            },
+            "defaultValue": "EMS"
+        },
+        "Tier_Name": {
+            "type": "string",
+            "maxLength": 2,
+            "metadata": {
+                "description": "2 chars E.g. Sanbox (SB), Live (LI) and training (TR)"
+            },
+            "defaultValue": "SB"
+        },
+        "Environment_Category": {
+            "type": "string",
+            "maxLength": 3,
+            "metadata": {
+                "description": "3 char. E.g.  DEV, QA, UAT and PRD"
+            },
+            "defaultValue": "DEV"
+        },
+        "Role": {
+            "type": "string",
+            "maxLength": 3,
+            "metadata": {
+                "description": "3 chars e.g. Front end (WEB), Storage (STR), Messaging (MSG), Network (NET), General (GEN) etc."
+            },
+            "defaultValue": "SQL"
+        },
+        "Tenant": {
+            "type": "string",
+            "maxLength": 3,
+            "metadata": {
+                "description": "3 chars  Shared (SRD), Tenant Acronym)"
+            },
+            "defaultValue": "SRD"
+        },
+        "Custom": {
+            "type": "string",
+            "maxLength": 8,
+            "metadata": {
+                "description": "(Product Specific) Space. 8 chars (OPTIONAL)"
+            },
+            "defaultValue": "EFOQA"
+        },
+        "virtualNetworkResourceGroup": {
+            "type": "string",
+            "defaultvalue": "fa-dr-poc"
+        },
+        "virtualNetworkName": {
+            "type": "string",
+            "defaultvalue": "DREFOQAPOC"
+        },
+        "RW_SubnetName": {
+            "type": "string",
+            "defaultValue": "default"
+        },
+        "RO_SubnetName": {
+            "type": "string",
+            "defaultValue": "default"
+        },
+        "privateIpAddress": {
+            "type": "array",
+            "defaultvalue": [
+                "10.5.0.29",
+                "10.5.0.30"
+            ]
+        },
+        "clusterIpAddress": {
+            "defaultValue": "10.5.0.29",
+            "type": "string"
+        },
+        "virtualMachineSize": {
+            "type": "string",
+            "defaultvalue": "Standard_DS4_v2"
+        },
+        "numberOfDataDisks": {
+            "type": "int",
+            "minValue": 3,
+            "defaultvalue": 3
+        },
+        "DataDiskSize": {
+            "type": "int",
+            "defaultvalue": 1
+        },
+        "omsWorkspaceResourceGroup": {
+            "type": "string",
+            "defaultvalue": "fa-dr-poc"
+        },
+        "omsWorkspaceName": {
+            "type": "string",
+            "defaultvalue": "fa-log-analytics"
+        },
+        "adminUsername": {
+            "type": "string",
+            "defaultvalue": ""
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "defaultvalue": ""
+        },
+        "domainName": {
+            "type": "string",
+            "defaultvalue": "drefoqa.com"
+        },
+        "DomainUserName": {
+            "type": "string",
+            "defaultvalue": ""
+        },
+        "DomainPassword": {
+            "type": "securestring",
+            "defaultvalue": ""
+        },
+        "baseUri": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/hanuravim/demo-ems/master"
+        }
+    },
+    "variables": {
+        "CharactersForvmName": 2,
+        "StorageAccountType": "Standard_LRS",
+        "availabilitySetName": "[tolower(concat(parameters('Application_Acronym'),'-avset'))]",
+        "ResourceGroupName": "[toupper(concat('GAV-',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-',parameters('Tier_Name'),'-',parameters('Environment_Category'),'-',parameters('Role'),'-',parameters('Tenant'),'-','01','-',parameters('Custom')))]",
+        "StorageAccountName": "[tolower(concat(parameters('Application_Acronym'),parameters('shortlocation'),parameters('Tier_Name'),parameters('Environment_Category'),'str','00'))]",
+        "vnetID": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('virtualNetworkResourceGroup'),'/providers/Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'))]",
+        "RW_Subnet": "[concat(variables('vnetID'),'/subnets/', parameters('RW_SubnetName'))]",
+        "RO_Subnet": "[concat(variables('vnetID'),'/subnets/', parameters('RO_SubnetName'))]",
+        "networkInterfaceName": "[tolower(concat('GAV',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-',parameters('Environment_Category'),'-','nic','-',parameters('Custom'),'-','00'))]",
+        "networkSecurityGroupName": "[tolower(concat('GAV',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-',parameters('Environment_Category'),'-','nsg','-',parameters('Custom'),'-','00'))]",
+        "virtualmachineName": "[tolower(concat(take(parameters('Application_Acronym'),variables('CharactersForvmName')),first(parameters('Environment_Category')),first(parameters('Role')),parameters('Custom'),'00'))]",
+        "osDiskName": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','osd','-','dsk','-',parameters('Role'),'00'))]",
+        "dataDiskName": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','dat','-','dsk','-',parameters('Role'),'00'))]",
+        "nsgTemplateURL": "[concat(parameters('baseUri'),'/ems-manager/nestedTemplates/networkSecurityGroup.json')]",
+        "StorageAccountTemplate": "[concat(parameters('baseUri'),'/SQL/nestedTemplates/StorageAccount.json')]",
+        "virtualMachineTemplate": "[concat(parameters('baseUri'),'/SQL/nestedTemplates/sqlvm.json')]",
+        "domainJoinTemplate": "[concat(parameters('baseUri'),'/SQL/nestedTemplates/domainJoin.json')]",
+        "omsAgentTemplate": "[concat(parameters('baseUri'),'/SQL/nestedTemplates/omsAgent.json')]",
+        "diskInitializeTemplate": "[concat(parameters('baseUri'),'/SQL/nestedTemplates/diskInitialize.json')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[concat(variables('virtualmachineName'), copyIndex(1))]",
+            "apiVersion": "2018-10-01",
+            "location": "[resourcegroup().location]",
+            "copy": {
+                "name": "virtualMachineLoop",
+                "count": "[if(equals(parameters('numberofSQLVMs'),2), 2, 1)]"
+            },
+            "dependsOn": [],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('virtualMachineSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[concat(variables('virtualmachineName'),copyIndex(1))]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftSqlServer",
+                        "offer": "SQL2016SP1-WS2016",
+                        "sku": "Enterprise",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[concat(variables('osDiskName'), copyIndex(1))]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "[variables('StorageAccountType')]"
+                        }
+                    },
+                    "copy": [
+                        {
+                            "name": "dataDisks",
+                            "count": "[parameters('numberOfDataDisks')]",
+                            "input": {
+                                "caching": "ReadWrite",
+                                "diskSizeGB": "[parameters('DataDiskSize')]",
+                                "lun": "[copyIndex('dataDisks')]",
+                                "name": "[concat(variables('dataDiskName'),copyIndex(1), copyIndex('dataDisks'))]",
+                                "createOption": "Empty"
+                            }
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('networkInterfaceName'), copyindex(1)))]"
+                        }
+                    ]
+                }
+            },
+            "resources": []
+        }
+    ]
+}
