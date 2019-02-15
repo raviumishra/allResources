@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkinterfaceName": {
+            "type": "string"
+        },
+        "virtualmachineIPs": {
+            "type": "array"
+        },
+        "SubnetRef": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "nicArray": [
+            "pdc001",
+            "bdc002",
+            "sql001",
+            "sql002",
+            "emsmgr001",
+            "sftp001"
+        ]
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(parameters('networkinterfaceName'),variables('nicArray')[copyindex()])]",
+            "apiVersion": "2018-05-01",
+            "location": "[resourcegroup().location]",
+            "copy": {
+                "name": "nicLoop",
+                "count": 6
+            },
+            "dependsOn": [],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIpAddress": "[concat(parameters('virtualmachineIPs')[copyindex()])]",
+                            "privateIpAddressVersion": "IPv4",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[parameters('SubnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
