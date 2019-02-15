@@ -2,36 +2,20 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "AvailabilitySet": {
-            "type": "string",
-            "allowedValues": [
-                "Yes",
-                "No"
-            ]
-        },
         "availabilitySetName": {
             "type": "string"
         }
     },
-    "variables": {
-        "availabilitySetArray": [
-            "ad",
-            "sql",
-            "emsmgr",
-            "webapi",
-            "emsadmin"
-        ]
-    },
+    "variables": {},
     "resources": [
         {
-            "condition": "[equals(parameters('AvailabilitySet'), 'Yes')]",
             "type": "Microsoft.Compute/availabilitySets",
             "apiVersion": "2018-10-01",
-            "name": "[concat(parameters('availabilitySetName'),variables('availabilitySetArray')[copyindex()])]",
+            "name": "[parameters('availabilitySetName')]",
             "location": "[resourcegroup().location]",
             "copy": {
                 "name": "avsetLoop",
-                "count": 5
+                "count": 1
             },
             "properties": {
                 "platformFaultDomainCount": 2,
