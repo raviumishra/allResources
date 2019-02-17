@@ -113,6 +113,22 @@
                             "serviceEndpoints": [],
                             "delegations": []
                         }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names')[11]]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes')[12]]",
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names')[12]]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes')[13]]",
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
                     }
                 ],
                 "virtualNetworkPeerings": [],
