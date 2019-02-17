@@ -1,0 +1,49 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "loadbalancerCount": {
+            "type": "int"
+        },
+        "loadbalancerName": {
+            "type": "string"
+        },
+        "InternalLoadBalancerIP": {
+            "type": "array"
+        },
+        "SubnetRef": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2018-08-01",
+            "name": "[parameters('loadbalancerName')]",
+            "type": "Microsoft.Network/loadBalancers",
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "ilbLoop",
+                "count": "[parameters('loadbalancerCount')]"
+            },
+            "sku": {
+                "name": "Basic"
+            },
+            "dependsOn": [],
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "LoadBalancerFrontEnd",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[parameters('SubnetRef')]"
+                            },
+                            "privateIPAddress": "[concat(parameters('InternalLoadBalancerIP')[copyindex()])]"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
