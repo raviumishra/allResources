@@ -121,7 +121,6 @@
             "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[5])]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[4])]",
                 "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[3])]"
             ],
             "properties": {
