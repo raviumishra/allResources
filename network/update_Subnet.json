@@ -93,6 +93,32 @@
                     "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[3])]"
                 }
             }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[4])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[5]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[4])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[5])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[6]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[5])]"
+                }
+            }
         }
     ]
 }
