@@ -3,20 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "nsgName": {
-            "type": "array",
-            "defaultValue": [
-                "AD",
-                "sql",
-                "manager",
-                "worker",
-                "webapi",
-                "jumpbox",
-                "sftp",
-                "wasabi",
-                "gateway",
-                "vpn",
-                "logAnalytics"
-            ]
+            "type": "array"
         }
     },
     "variables": {},
