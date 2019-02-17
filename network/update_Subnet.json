@@ -60,7 +60,9 @@
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[1])]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [],
+            "dependsOn": [
+                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[0])]"
+            ],
             "properties": {
                 "addressPrefix": "[parameters('address_Prefixes')[2]]",
                 "networkSecurityGroup": {
@@ -73,7 +75,9 @@
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[2])]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [],
+            "dependsOn": [
+                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[1])]"
+            ],
             "properties": {
                 "addressPrefix": "[parameters('address_Prefixes')[3]]",
                 "networkSecurityGroup": {
@@ -86,7 +90,9 @@
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[3])]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [],
+            "dependsOn": [
+                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[2])]"
+            ],
             "properties": {
                 "addressPrefix": "[parameters('address_Prefixes')[4]]",
                 "networkSecurityGroup": {
@@ -99,7 +105,9 @@
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[4])]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [],
+            "dependsOn": [
+                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[3])]"
+            ],
             "properties": {
                 "addressPrefix": "[parameters('address_Prefixes')[5]]",
                 "networkSecurityGroup": {
@@ -112,7 +120,10 @@
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[5])]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [],
+            "dependsOn": [
+                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[4])]",
+                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[3])]"
+            ],
             "properties": {
                 "addressPrefix": "[parameters('address_Prefixes')[6]]",
                 "networkSecurityGroup": {
