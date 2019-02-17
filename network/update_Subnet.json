@@ -67,6 +67,19 @@
                     "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[1])]"
                 }
             }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[2])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[3]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[2])]"
+                }
+            }
         }
     ]
 }
