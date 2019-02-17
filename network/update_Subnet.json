@@ -2,11 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "virtualNetwork_Name": {
-            "defaultValue": "testemsvnet",
-            "type": "String"
-        },
-        "subnet_Names": {
+        "nsgName": {
             "type": "array",
             "defaultValue": [
                 "AD",
@@ -21,113 +17,272 @@
                 "vpn",
                 "logAnalytics"
             ]
-        },
-        "address_Prefixes": {
-            "type": "array",
-            "defaultValue": [
-                "10.4.0.0/16",
-                "10.4.0.0/24",
-                "10.4.1.0/24",
-                "10.4.2.0/24",
-                "10.4.3.0/24",
-                "10.4.4.0/24",
-                "10.4.5.0/24",
-                "10.4.6.0/24",
-                "10.4.7.0/24",
-                "10.4.8.0/24",
-                "10.4.9.0/24",
-                "10.4.10.0/24"
-            ]
         }
     },
     "variables": {},
     "resources": [
         {
-            "apiVersion": "2018-03-01",
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[0])]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[0]]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [],
+            "apiVersion": "2018-03-01",
             "properties": {
-                "addressPrefix": "[parameters('address_Prefixes')[1]]",
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[0])]"
-                }
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
             }
         },
         {
-            "apiVersion": "2018-03-01",
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[1])]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[1]]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[0])]"
-            ],
+            "apiVersion": "2018-03-01",
             "properties": {
-                "addressPrefix": "[parameters('address_Prefixes')[2]]",
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[1])]"
-                }
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
             }
         },
         {
-            "apiVersion": "2018-03-01",
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[2])]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[2]]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[1])]"
-            ],
+            "apiVersion": "2018-03-01",
             "properties": {
-                "addressPrefix": "[parameters('address_Prefixes')[3]]",
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[2])]"
-                }
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
             }
         },
         {
-            "apiVersion": "2018-03-01",
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[3])]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[3]]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[2])]"
-            ],
+            "apiVersion": "2018-03-01",
             "properties": {
-                "addressPrefix": "[parameters('address_Prefixes')[4]]",
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[3])]"
-                }
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
             }
         },
         {
-            "apiVersion": "2018-03-01",
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[4])]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[4]]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[3])]"
-            ],
+            "apiVersion": "2018-03-01",
             "properties": {
-                "addressPrefix": "[parameters('address_Prefixes')[5]]",
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[4])]"
-                }
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
             }
         },
         {
-            "apiVersion": "2018-03-01",
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[5])]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[5]]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[4])]"
-            ],
+            "apiVersion": "2018-03-01",
             "properties": {
-                "addressPrefix": "[parameters('address_Prefixes')[6]]",
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[5])]"
-                }
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[6]]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2018-03-01",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[7]]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2018-03-01",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[8]]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2018-03-01",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[9]]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2018-03-01",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName')[10]]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2018-03-01",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
             }
         }
     ]
