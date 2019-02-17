@@ -1,0 +1,189 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetwork_Name": {
+            "defaultValue": "testemsvnet",
+            "type": "String"
+        },
+        "subnet_Names": {
+            "type": "array",
+            "defaultValue": [
+                "AD",
+                "sql",
+                "manager",
+                "worker",
+                "webapi",
+                "jumpbox",
+                "sftp",
+                "wasabi",
+                "gateway",
+                "vpn",
+                "logAnalytics"
+            ]
+        },
+        "address_Prefixes": {
+            "type": "array",
+            "defaultValue": [
+                "10.4.0.0/16",
+                "10.4.0.0/24",
+                "10.4.1.0/24",
+                "10.4.2.0/24",
+                "10.4.3.0/24",
+                "10.4.4.0/24",
+                "10.4.5.0/24",
+                "10.4.6.0/24",
+                "10.4.7.0/24",
+                "10.4.8.0/24",
+                "10.4.9.0/24",
+                "10.4.10.0/24"
+            ]
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[0])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[1]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[0])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[1])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[2]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[1])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[2])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[3]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[2])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[3])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[4]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[3])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[4])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[5]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[4])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[5])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[6]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[5])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[6])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[7]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[6])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[7])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[8]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[7])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[8])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[9]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[8])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[9])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[10]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[9])]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetwork_Name'), '/', parameters('subnet_Names')[10])]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "addressPrefix": "[parameters('address_Prefixes')[11]]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('subnet_Names')[10])]"
+                }
+            }
+        }
+    ]
+}
