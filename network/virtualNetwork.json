@@ -135,9 +135,7 @@
                 "enableDdosProtection": false,
                 "enableVmProtection": false
             },
-            "dependsOn": [
-                "networkSecurityGroup"
-            ]
+            "dependsOn": []
         }
     ]
 }
