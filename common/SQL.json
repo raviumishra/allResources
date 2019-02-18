@@ -39,7 +39,7 @@
             "location": "[resourcegroup().location]",
             "copy": {
                 "name": "virtualMachineLoop",
-                "count": "[if(equals(parameters('numberofSQLVMs'),2), 2, 1)]"
+                "count": "[parameters('numberofSQLVMs')]"
             },
             "dependsOn": [],
             "properties": {
