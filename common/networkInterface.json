@@ -2,35 +2,32 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "nicCount": {
+            "type": "int"
+        },
         "networkinterfaceName": {
             "type": "string"
         },
-        "virtualmachineIPs": {
+        "sqlPrivateIP": {
             "type": "array"
         },
-        "SubnetRef": {
+        "RW_SubnetName": {
+            "type": "string"
+        },
+        "RO_SubnetName": {
             "type": "string"
         }
     },
-    "variables": {
-        "nicArray": [
-            "pdc001",
-            "bdc002",
-            "sql001",
-            "sql002",
-            "emsmgr001",
-            "sftp001"
-        ]
-    },
+    "variables": {},
     "resources": [
         {
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(parameters('networkinterfaceName'),variables('nicArray')[copyindex()])]",
+            "name": "[concat(parameters('networkinterfaceName'), copyIndex(1))]",
             "apiVersion": "2018-05-01",
             "location": "[resourcegroup().location]",
             "copy": {
                 "name": "nicLoop",
-                "count": 6
+                "count": 2
             },
             "dependsOn": [],
             "properties": {
@@ -38,11 +35,11 @@
                     {
                         "name": "ipconfig1",
                         "properties": {
-                            "privateIpAddress": "[concat(parameters('virtualmachineIPs')[copyindex()])]",
+                            "privateIpAddress": "[concat(parameters('sqlPrivateIP')[copyindex()])]",
                             "privateIpAddressVersion": "IPv4",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[parameters('SubnetRef')]"
+                                "id": "[parameters('RW_SubnetName')]"
                             }
                         }
                     }
