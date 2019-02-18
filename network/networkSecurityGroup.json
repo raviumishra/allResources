@@ -10,7 +10,7 @@
     "resources": [
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[0]]",
+            "name": "[parameters('nsgName').appgateway]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -34,7 +34,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[1]]",
+            "name": "[parameters('nsgName').gateway]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -58,7 +58,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[2]]",
+            "name": "[parameters('nsgName').manager]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -82,7 +82,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[3]]",
+            "name": "[parameters('nsgName').ad]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -106,7 +106,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[4]]",
+            "name": "[parameters('nsgName').worker]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -130,7 +130,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[5]]",
+            "name": "[parameters('nsgName').workerscaleset]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -154,7 +154,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[6]]",
+            "name": "[parameters('nsgName').loganalytics]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -178,7 +178,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[7]]",
+            "name": "[parameters('nsgName').webapi]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -202,7 +202,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[8]]",
+            "name": "[parameters('nsgName').webapipool]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -226,7 +226,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[9]]",
+            "name": "[parameters('nsgName').vpn]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -250,7 +250,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[10]]",
+            "name": "[parameters('nsgName').redis]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -274,7 +274,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[11]]",
+            "name": "[parameters('nsgName').tableau]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -298,7 +298,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[12]]",
+            "name": "[parameters('nsgName').sql]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -322,7 +322,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[13]]",
+            "name": "[parameters('nsgName').sqlVM]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -346,7 +346,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[14]]",
+            "name": "[parameters('nsgName').jumpbox]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -370,7 +370,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[15]]",
+            "name": "[parameters('nsgName').jumpboxVM]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -394,7 +394,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[16]]",
+            "name": "[parameters('nsgName').sftp]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -418,7 +418,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[17]]",
+            "name": "[parameters('nsgName').sftpVM]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
@@ -442,7 +442,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName')[18]]",
+            "name": "[parameters('nsgName').wasabi]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
