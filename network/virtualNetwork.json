@@ -6,13 +6,13 @@
             "type": "String"
         },
         "subnet_Names": {
-            "type": "array"
+            "type": "object"
         },
         "address_Prefixes": {
-            "type": "array"
+            "type": "object"
         },
         "nsgName": {
-            "type": "array"
+            "type": "object"
         }
     },
     "variables": {},
