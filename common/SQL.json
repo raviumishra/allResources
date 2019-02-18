@@ -62,14 +62,6 @@
         "DataDiskSize": {
             "type": "int",
             "defaultvalue": 1
-        },
-        "adminUsername": {
-            "type": "string",
-            "defaultvalue": ""
-        },
-        "adminPassword": {
-            "type": "securestring",
-            "defaultvalue": ""
         }
     },
     "variables": {
@@ -96,9 +88,7 @@
                     "vmSize": "[parameters('virtualMachineSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[concat(variables('virtualmachineName'),copyIndex(1))]",
-                    "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]"
+                    "computerName": "[concat(variables('virtualmachineName'),copyIndex(1))]"
                 },
                 "storageProfile": {
                     "imageReference": {
