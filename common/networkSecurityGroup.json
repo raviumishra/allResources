@@ -10,7 +10,7 @@
     "resources": [
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName').sql]",
+            "name": "[parameters('nsgName').sqlVMNSG]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-05-01",
             "properties": {
@@ -34,7 +34,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName').sftp]",
+            "name": "[parameters('nsgName').sftpVMNSG]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-05-01",
             "properties": {
@@ -58,7 +58,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName').jumpboxVM]",
+            "name": "[parameters('nsgName').jumpboxVMNSG]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-05-01",
             "properties": {
@@ -82,7 +82,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName').tableauSubnet]",
+            "name": "[parameters('nsgName').tableauSubnetNSG]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-05-01",
             "properties": {
@@ -106,7 +106,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName').redisSubnet]",
+            "name": "[parameters('nsgName').redisSubnetNSG]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-05-01",
             "properties": {
