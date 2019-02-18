@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "numberofSQLVMs": {
+        "numberofSQLVM": {
             "type": "int"
         },
         "virtualmachineName": {
@@ -45,7 +45,7 @@
             "location": "[resourcegroup().location]",
             "copy": {
                 "name": "virtualMachineLoop",
-                "count": "[parameters('numberofSQLVMs')]"
+                "count": "[parameters('numberofSQLVM')]"
             },
             "dependsOn": [],
             "properties": {
