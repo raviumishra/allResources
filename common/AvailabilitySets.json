@@ -15,7 +15,7 @@
             "location": "[resourcegroup().location]",
             "copy": {
                 "name": "avsetLoop",
-                "count": 1
+                "count": 2
             },
             "properties": {
                 "platformFaultDomainCount": 2,
