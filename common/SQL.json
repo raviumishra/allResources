@@ -3,79 +3,38 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "numberofSQLVMs": {
-            "type": "int",
-            "defaultValue": 1,
-            "allowedValues": [
-                1,
-                2
-            ]
+            "type": "int"
         },
-        "shortLocation": {
-            "type": "string",
-            "maxLength": 3,
-            "metadata": {
-                "description": "3 chars. E.g. East US - EU, West US - WU, East US 2 - EU2"
-            },
-            "defaultValue": "cu"
+        "virtualmachineName": {
+            "type": "string"
         },
-        "Application_Acronym": {
-            "type": "string",
-            "maxLength": 3,
-            "metadata": {
-                "description": "3 chars e.g. nxt (Next Net), ems"
-            },
-            "defaultValue": "EMS"
-        },
-        "Environment_Category": {
-            "type": "string",
-            "maxLength": 3,
-            "metadata": {
-                "description": "3 char. E.g.  DEV, QA, UAT and PRD"
-            },
-            "defaultValue": "DEV"
-        },
-        "Role": {
-            "type": "string",
-            "maxLength": 3,
-            "metadata": {
-                "description": "3 chars e.g. Front end (WEB), Storage (STR), Messaging (MSG), Network (NET), General (GEN) etc."
-            },
-            "defaultValue": "SQL"
-        },
-        "Custom": {
-            "type": "string",
-            "maxLength": 8,
-            "metadata": {
-                "description": "(Product Specific) Space. 8 chars (OPTIONAL)"
-            },
-            "defaultValue": "EFOQA"
+        "networkInterfaceName": {
+            "type": "string"
         },
         "virtualMachineSize": {
-            "type": "string",
-            "defaultvalue": "Standard_DS4_v2"
+            "type": "string"
+        },
+        "osDiskName": {
+            "type": "string"
+        },
+        "StorageAccountType": {
+            "type": "string"
         },
         "numberOfDataDisks": {
-            "type": "int",
-            "minValue": 3,
-            "defaultvalue": 3
+            "type": "int"
         },
         "DataDiskSize": {
-            "type": "int",
-            "defaultvalue": 1
+            "type": "int"
+        },
+        "dataDiskName": {
+            "type": "int"
         }
     },
-    "variables": {
-        "CharactersForvmName": 2,
-        "StorageAccountType": "Standard_LRS",
-        "networkInterfaceName": "[tolower(concat('GAV',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-',parameters('Environment_Category'),'-','nic','-',parameters('Custom'),'-','00'))]",
-        "virtualmachineName": "[tolower(concat(take(parameters('Application_Acronym'),variables('CharactersForvmName')),first(parameters('Environment_Category')),first(parameters('Role')),parameters('Custom'),'00'))]",
-        "osDiskName": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','osd','-','dsk','-',parameters('Role'),'00'))]",
-        "dataDiskName": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','dat','-','dsk','-',parameters('Role'),'00'))]"
-    },
+    "variables": {},
     "resources": [
         {
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[concat(variables('virtualmachineName'), copyIndex(1))]",
+            "name": "[concat(parameters('virtualmachineName'), copyIndex(1))]",
             "apiVersion": "2018-10-01",
             "location": "[resourcegroup().location]",
             "copy": {
@@ -88,7 +47,7 @@
                     "vmSize": "[parameters('virtualMachineSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[concat(variables('virtualmachineName'),copyIndex(1))]"
+                    "computerName": "[concat(parameters('virtualmachineName'),copyIndex(1))]"
                 },
                 "storageProfile": {
                     "imageReference": {
@@ -98,11 +57,11 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "name": "[concat(variables('osDiskName'), copyIndex(1))]",
+                        "name": "[concat(parameters('osDiskName'), copyIndex(1))]",
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
                         "managedDisk": {
-                            "storageAccountType": "[variables('StorageAccountType')]"
+                            "storageAccountType": "[parameters('StorageAccountType')]"
                         }
                     },
                     "copy": [
@@ -113,7 +72,7 @@
                                 "caching": "ReadWrite",
                                 "diskSizeGB": "[parameters('DataDiskSize')]",
                                 "lun": "[copyIndex('dataDisks')]",
-                                "name": "[concat(variables('dataDiskName'),copyIndex(1), copyIndex('dataDisks'))]",
+                                "name": "[concat(parameters('dataDiskName'),copyIndex(1), copyIndex('dataDisks'))]",
                                 "createOption": "Empty"
                             }
                         }
@@ -122,7 +81,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('networkInterfaceName'), copyindex(1)))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('networkInterfaceName'), copyindex(1)))]"
                         }
                     ]
                 }
