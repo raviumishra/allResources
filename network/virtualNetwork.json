@@ -41,11 +41,11 @@
                         }
                     },
                     {
-                        "name": "[parameters('subnet_Names').gateway]",
+                        "name": "[parameters('subnet_Names').manager]",
                         "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes').gateway]",
+                            "addressPrefix": "[parameters('address_Prefixes').manager]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').gateway)]"
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').manager)]"
                             },
                             "serviceEndpoints": [],
                             "delegations": []

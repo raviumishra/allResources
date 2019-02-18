@@ -1,0 +1,335 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "shortLocation": {
+            "type": "string",
+            "maxLength": 3,
+            "metadata": {
+                "description": "3 chars. E.g. East US - EU, West US - WU, East US 2 - EU2"
+            },
+            "defaultValue": "cu"
+        },
+        "Application_Acronym": {
+            "type": "string",
+            "maxLength": 3,
+            "metadata": {
+                "description": "3 chars e.g. nxt (Next Net), ems"
+            },
+            "defaultValue": "ems"
+        },
+        "Environment_Category": {
+            "type": "string",
+            "maxLength": 3,
+            "metadata": {
+                "description": "3 char. E.g.  DEV, QA, UAT and PRD"
+            },
+            "defaultValue": "dev"
+        },
+        "applicationGatewaySize": {
+            "type": "string",
+            "allowedValues": [
+                "Standard_Small",
+                "Standard_Medium",
+                "Standard_Large"
+            ],
+            "defaultValue": "Standard_Small"
+        },
+        "applicationGatewayInstanceCount": {
+            "type": "int",
+            "allowedValues": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+            ],
+            "defaultValue": 2,
+            "metadata": {
+                "description": "application gateway instance count"
+            }
+        },
+        "frontendPort": {
+            "type": "int",
+            "defaultValue": 80,
+            "metadata": {
+                "description": "application gateway front end port"
+            }
+        },
+        "backendPort": {
+            "type": "int",
+            "defaultValue": 80,
+            "metadata": {
+                "description": "application gateway back end port"
+            }
+        },
+        "backendIPAddresses": {
+            "type": "array",
+            "defaultValue": [
+                {
+                    "IpAddress": "10.0.0.4"
+                },
+                {
+                    "IpAddress": "10.0.0.5"
+                }
+            ],
+            "metadata": {
+                "description": "back end pool ip addresses"
+            }
+        },
+        "cookieBasedAffinity": {
+            "type": "string",
+            "allowedValues": [
+                "Enabled",
+                "Disabled"
+            ],
+            "defaultValue": "Disabled",
+            "metadata": {
+                "description": "cookie based affinity"
+            }
+        },
+        "nsgName": {
+            "type": "object",
+            "defaultValue": {
+                "appgateway": "appgatewayNSG",
+                "manager": "managerNSG",
+                "ad": "adNSG",
+                "worker": "workerNSG",
+                "loganalytics": "loganalyticsNSG",
+                "webapi": "webapiNSG",
+                "vpn": "vpnNSG",
+                "redis": "redisNSG",
+                "tableau": "tableauNSG",
+                "sql": "sqlNSG",
+                "jumpbox": "jumpboxNSG",
+                "sftp": "sftpNSG",
+                "wasabi": "wasabiNSG"
+            }
+        },
+        "subnet_Names": {
+            "type": "object",
+            "defaultValue": {
+                "appgateway": "appgatewaySubnet",
+                "manager": "managerSubnet",
+                "worker": "workerSubnet",
+                "webapi": "webapiSubnet",
+                "vpn": "vpnSubnet",
+                "sql": "sqlSubnet",
+                "jumpbox": "jumpboxSubnet",
+                "sftp": "sftpSubnet",
+                "wasabi": "wasabiSubnet",
+                "tableau": "tableauSubnet",
+                "redis": "redisSubnet",
+                "loganalytics": "loganalyticsSubnet",
+                "ad": "adSubnet"
+            }
+        },
+        "address_Prefixes": {
+            "type": "object",
+            "defaultValue": {
+                "vnet": "10.4.0.0/16",
+                "appgateway": "10.4.0.0/24",
+                "manager": "10.4.1.0/24",
+                "worker": "10.4.2.0/24",
+                "webapi": "10.4.3.0/24",
+                "vpn": "10.4.4.0/24",
+                "sql": "10.4.5.0/24",
+                "jumpbox": "10.4.6.0/24",
+                "sftp": "10.4.7.0/24",
+                "wasabi": "10.4.8.0/24",
+                "tableau": "10.4.9.0/24",
+                "redis": "10.4.10.0/24",
+                "loganalytics": "10.4.11.0/24",
+                "ad": "10.4.12.0/24"
+            }
+        },
+        "emsManagerILB": {
+            "type": "object",
+            "defaultValue": {
+                "Name": "emsManagerILB",
+                "IP": "10.4.1.5"
+            }
+        },
+        "webapiILB": {
+            "type": "object",
+            "defaultValue": {
+                "Name": "webapiILB",
+                "IP": "10.4.3.5"
+            }
+        },
+        "sqlILB": {
+            "type": "object",
+            "defaultValue": {
+                "Name": "sqlILB",
+                "IP": "10.4.5.5"
+            }
+        },
+        "jumpboxILB": {
+            "type": "object",
+            "defaultValue": {
+                "Name": "jumpboxILB",
+                "IP": "10.4.6.5"
+            }
+        },
+        "baseUri": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/hanuravim"
+        }
+    },
+    "variables": {
+        "applicationGatewaySubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('resourceNames').virtualNetwork, parameters('subnet_Names').appgateway)]",
+        "emsManagerSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('resourceNames').virtualNetwork, parameters('subnet_Names').manager)]",
+        "webapiSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('resourceNames').virtualNetwork, parameters('subnet_Names').webapi)]",
+        "sqlSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('resourceNames').virtualNetwork, parameters('subnet_Names').sql)]",
+        "jumpboxSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('resourceNames').virtualNetwork, parameters('subnet_Names').jumpbox)]",
+        "resourceNames": {
+            "virtualNetwork": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','vn-','001'))]",
+            "applicationGateway": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','vgw-','001'))]",
+            "networkSecurityGroup": "[tolower(concat('GAV',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-',parameters('Environment_Category'),'-','nsg','-','00'))]",
+            "loadbalancer": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','ilb-'))]",
+            "networkinterface": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','web-','nic-'))]"
+        },
+        "tempalteURLs": {
+            "networkSecurityGroup": "[concat(parameters('baseUri'),'/allResources/master/network/networkSecurityGroup.json')]",
+            "virtualNetwork": "[concat(parameters('baseUri'),'/allResources/master/network/virtualNetwork.json')]",
+            "applicationGateway": "[concat(parameters('baseUri'),'/allResources/master/network/applicationGateway.json')]",
+            "loadbalancer": "[concat(parameters('baseUri'),'/allResources/master/network/loadbalancers.json')]"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "name": "networkSecurityGroup",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('tempalteURLs').networkSecurityGroup]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "nsgName": {
+                        "value": "[parameters('nsgName')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "name": "virtualNetwork",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "networkSecurityGroup"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('tempalteURLs').virtualNetwork]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualNetworkName": {
+                        "value": "[variables('resourceNames').virtualNetwork]"
+                    },
+                    "subnet_Names": {
+                        "value": "[parameters('subnet_Names')]"
+                    },
+                    "address_Prefixes": {
+                        "value": "[parameters('address_Prefixes')]"
+                    },
+                    "nsgName": {
+                        "value": "[parameters('nsgName')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "name": "applicationGateway",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "virtualNetwork"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('tempalteURLs').applicationGateway]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "applicationGatewaySubnetRef": {
+                        "value": "[variables('applicationGatewaySubnetRef')]"
+                    },
+                    "applicationGatewayName": {
+                        "value": "[variables('resourceNames').applicationGateway]"
+                    },
+                    "applicationGatewaySize": {
+                        "value": "[parameters('applicationGatewaySize')]"
+                    },
+                    "applicationGatewayInstanceCount": {
+                        "value": "[parameters('applicationGatewayInstanceCount')]"
+                    },
+                    "frontendPort": {
+                        "value": "[parameters('frontendPort')]"
+                    },
+                    "backendPort": {
+                        "value": "[parameters('backendPort')]"
+                    },
+                    "backendIPAddresses": {
+                        "value": "[parameters('backendIPAddresses')]"
+                    },
+                    "cookieBasedAffinity": {
+                        "value": "[parameters('cookieBasedAffinity')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "name": "loadbalancers",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "virtualNetwork"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('tempalteURLs').loadbalancer]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "emsManagerILB": {
+                        "value": "[parameters('emsManagerILB')]"
+                    },
+                    "emsManagerSubnetRef": {
+                        "value": "[variables('emsManagerSubnetRef')]"
+                    },
+                    "webapiILB": {
+                        "value": "[parameters('webapiILB')]"
+                    },
+                    "webapiSubnetRef": {
+                        "value": "[variables('webapiSubnetRef')]"
+                    },
+                    "sqlILB": {
+                        "value": "[parameters('sqlILB')]"
+                    },
+                    "sqlSubnetRef": {
+                        "value": "[variables('sqlSubnetRef')]"
+                    },
+                    "jumpboxILB": {
+                        "value": "[parameters('jumpboxILB')]"
+                    },
+                    "jumpboxSubnetRef": {
+                        "value": "[variables('jumpboxSubnetRef')]"
+                    }
+                }
+            }
+        }
+    ]
+}

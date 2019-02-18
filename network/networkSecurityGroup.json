@@ -34,7 +34,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('nsgName').gateway]",
+            "name": "[parameters('nsgName').manager]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-03-01",
             "properties": {
