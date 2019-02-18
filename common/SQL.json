@@ -27,7 +27,7 @@
             "type": "int"
         },
         "dataDiskName": {
-            "type": "int"
+            "type": "string"
         }
     },
     "variables": {},
