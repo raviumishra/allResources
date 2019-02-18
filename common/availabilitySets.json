@@ -6,12 +6,17 @@
             "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+        "avsetSuffix": [
+            "-sql",
+            "-jumpbox"
+        ]
+    },
     "resources": [
         {
             "type": "Microsoft.Compute/availabilitySets",
             "apiVersion": "2018-10-01",
-            "name": "[parameters('availabilitySetName')]",
+            "name": "[concat(parameters('availabilitySetName'),copyindex())]",
             "location": "[resourcegroup().location]",
             "copy": {
                 "name": "avsetLoop",
