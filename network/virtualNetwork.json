@@ -26,147 +26,147 @@
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "[parameters('address_Prefixes')[0]]"
+                        "[parameters('address_Prefixes').vnet]"
                     ]
                 },
                 "subnets": [
                     {
-                        "name": "[parameters('subnet_Names')[0]]",
+                        "name": "[parameters('subnet_Names').appgateway]",
                         "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[1]]",
+                            "addressPrefix": "[parameters('address_Prefixes').appgateway]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[0])]"
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').appgateway)]"
                             },
                             "delegations": []
                         }
                     },
                     {
-                        "name": "[parameters('subnet_Names')[1]]",
+                        "name": "[parameters('subnet_Names').manager]",
                         "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[2]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[1])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[2]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[3]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[2])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[3]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[4]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[3])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[4]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[5]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[4])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[5]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[6]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[5])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[6]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[7]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[6])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[7]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[8]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[7])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[8]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[9]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[8])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[9]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[10]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[9])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[10]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[11]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[10])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[11]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[12]]",
-                            "networkSecurityGroup":{
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[11])]"
-                            },
-                            "serviceEndpoints": [],
-                            "delegations": []
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet_Names')[12]]",
-                        "properties": {
-                            "addressPrefix": "[parameters('address_Prefixes')[13]]",
+                            "addressPrefix": "[parameters('address_Prefixes').manager]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName')[12])]"
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').manager)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').worker]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').worker]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').worker)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').webapi]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').webapi]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').webapi)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').vpn]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').vpn]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').vpn)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').sql]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').sql]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').sql)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').jumpbox]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').jumpbox]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').jumpbox)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').sftp]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').sftp]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').sftp)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').wasabi]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').wasabi]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').wasabi)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').tableau]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').tableau]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').tableau)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').redis]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').redis]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').redis)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').loganalytics]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').loganalytics]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').loganalytics)]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet_Names').ad]",
+                        "properties": {
+                            "addressPrefix": "[parameters('address_Prefixes').ad]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId(resourcegroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('nsgName').ad)]"
                             },
                             "serviceEndpoints": [],
                             "delegations": []
