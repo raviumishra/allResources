@@ -2,30 +2,38 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "loadbalancerCount": {
-            "type": "int"
+        "emsManagerILB": {
+            "type": "object"
         },
-        "loadbalancerName": {
+        "emsManagerSubnetRef": {
             "type": "string"
         },
-        "InternalLoadBalancerIP": {
-            "type": "array"
+        "webapiILB":{
+            "type":"object"
         },
-        "SubnetRef": {
-            "type": "string"
+        "webapiSubnetRef":{
+            "type":"string"
+        },
+        "sqlILB":{
+            "type":"object"
+        },
+        "sqlSubnetRef":{
+            "type":"string"
+        },
+        "jumpboxILB":{
+            "type":"object"
+        },
+        "jumpboxSubnetRef":{
+            "type":"string"
         }
     },
     "variables": {},
     "resources": [
         {
             "apiVersion": "2018-08-01",
-            "name": "[parameters('loadbalancerName')]",
+            "name": "[parameters('emsManagerILB').Name]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
-            "copy": {
-                "name": "ilbLoop",
-                "count": "[parameters('loadbalancerCount')]"
-            },
             "sku": {
                 "name": "Basic"
             },
@@ -37,9 +45,81 @@
                         "properties": {
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[parameters('SubnetRef')]"
+                                "id": "[parameters('emsManagerSubnetRef')]"
                             },
-                            "privateIPAddress": "[concat(parameters('InternalLoadBalancerIP')[copyindex()])]"
+                            "privateIPAddress": "[parameters('emsManagerILB').IP]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2018-08-01",
+            "name": "[parameters('webapiILB').Name]",
+            "type": "Microsoft.Network/loadBalancers",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Basic"
+            },
+            "dependsOn": [],
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "LoadBalancerFrontEnd",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[parameters('webapiSubnetRef')]"
+                            },
+                            "privateIPAddress": "[parameters('webapiILB').IP]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2018-08-01",
+            "name": "[parameters('sqlILB').Name]",
+            "type": "Microsoft.Network/loadBalancers",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Basic"
+            },
+            "dependsOn": [],
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "LoadBalancerFrontEnd",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[parameters('sqlSubnetRef')]"
+                            },
+                            "privateIPAddress": "[parameters('sqlILB').IP]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2018-08-01",
+            "name": "[parameters('jumpboxILB').Name]",
+            "type": "Microsoft.Network/loadBalancers",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Basic"
+            },
+            "dependsOn": [],
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "LoadBalancerFrontEnd",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[parameters('jumpboxSubnetRef')]"
+                            },
+                            "privateIPAddress": "[parameters('jumpboxILB').IP]"
                         }
                     }
                 ]
