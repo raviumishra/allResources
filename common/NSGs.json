@@ -2,43 +2,113 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "networkSecurityGroupName": {
-            "type": "string"
+        "nsgName": {
+            "type": "object"
         }
     },
-    "variables": {
-        "nsgArray": [
-            "ad",
-            "wafGateway",
-            "emsSubnet",
-            "emsmanager",
-            "emsscalesetSubnet",
-            "emsscalesetWorkers",
-            "webapi",
-            "vpnGateway",
-            "sqlSubnet",
-            "sqlvm",
-            "jumpboxSubnet",
-            "jumpboxvm",
-            "sftpSubnet",
-            "sftpvm",
-            "wasabiSubnet",
-            "wasabivm",
-            "tableauSubnet",
-            "redisSubnet",
-            "omsSubnet"
-        ]
-    },
+    "variables": {},
     "resources": [
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[concat(parameters('networkSecurityGroupName'),variables('nsgArray')[copyindex()])]",
+            "name": "[parameters('nsgName').sql]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-05-01",
-            "copy": {
-                "name": "nsgloop",
-                "count": 19
-            },
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName').sftp]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2018-05-01",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName').jumpboxVM]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2018-05-01",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName').tableauSubnet]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2018-05-01",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "description": "Allows SSH traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('nsgName').redisSubnet]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2018-05-01",
             "properties": {
                 "securityRules": [
                     {
