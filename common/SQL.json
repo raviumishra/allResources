@@ -28,6 +28,12 @@
         },
         "dataDiskName": {
             "type": "string"
+        },
+        "adminUsername": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
         }
     },
     "variables": {},
@@ -47,7 +53,9 @@
                     "vmSize": "[parameters('virtualMachineSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[concat(parameters('virtualmachineName'),copyIndex(1))]"
+                    "computerName": "[concat(parameters('virtualmachineName'),copyIndex(1))]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
                 },
                 "storageProfile": {
                     "imageReference": {
