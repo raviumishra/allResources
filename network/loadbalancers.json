@@ -2,38 +2,26 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "emsManagerILB_Name": {
-            "type": "string"
-        },
-        "emsManagerILB_IP": {
-            "type": "string"
+        "emsManagerILB": {
+            "type": "object"
         },
         "emsManagerSubnetRef": {
             "type": "string"
         },
-        "webapiILB_Name":{
-            "type":"string"
-        },
-        "webapiILB_IP":{
-            "type":"string"
+        "webapiILB":{
+            "type":"object"
         },
         "webapiSubnetRef":{
             "type":"string"
         },
-        "sqlILB_Name":{
-            "type":"string"
-        },
-        "sqlILB_IP":{
-            "type":"string"
+        "sqlILB":{
+            "type":"object"
         },
         "sqlSubnetRef":{
             "type":"string"
         },
-        "jumpboxILB_Name":{
-            "type":"string"
-        },
-        "jumpboxILB_IP":{
-            "type":"string"
+        "jumpboxILB":{
+            "type":"object"
         },
         "jumpboxSubnetRef":{
             "type":"string"
@@ -43,7 +31,7 @@
     "resources": [
         {
             "apiVersion": "2018-08-01",
-            "name": "[parameters('emsManagerILB_Name')]",
+            "name": "[parameters('emsManagerILB').Name]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -59,7 +47,7 @@
                             "subnet": {
                                 "id": "[parameters('emsManagerSubnetRef')]"
                             },
-                            "privateIPAddress": "[parameters('emsManagerILB_IP')]"
+                            "privateIPAddress": "[parameters('emsManagerILB').IP]"
                         }
                     }
                 ]
@@ -67,7 +55,7 @@
         },
         {
             "apiVersion": "2018-08-01",
-            "name": "[parameters('webapiILB_Name')]",
+            "name": "[parameters('webapiILB').Name]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -83,7 +71,7 @@
                             "subnet": {
                                 "id": "[parameters('webapiSubnetRef')]"
                             },
-                            "privateIPAddress": "[parameters('webapiILB_IP')]"
+                            "privateIPAddress": "[parameters('webapiILB').IP]"
                         }
                     }
                 ]
@@ -91,7 +79,7 @@
         },
         {
             "apiVersion": "2018-08-01",
-            "name": "[parameters('sqlILB_Name')]",
+            "name": "[parameters('sqlILB').Name]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -107,7 +95,7 @@
                             "subnet": {
                                 "id": "[parameters('sqlSubnetRef')]"
                             },
-                            "privateIPAddress": "[parameters('sqlILB_IP')]"
+                            "privateIPAddress": "[parameters('sqlILB').IP]"
                         }
                     }
                 ]
@@ -115,7 +103,7 @@
         },
         {
             "apiVersion": "2018-08-01",
-            "name": "[parameters('jumpboxILB_Name')]",
+            "name": "[parameters('jumpboxILB').Name]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -131,7 +119,7 @@
                             "subnet": {
                                 "id": "[parameters('jumpboxSubnetRef')]"
                             },
-                            "privateIPAddress": "[parameters('jumpboxILB_IP')]"
+                            "privateIPAddress": "[parameters('jumpboxILB').IP]"
                         }
                     }
                 ]
