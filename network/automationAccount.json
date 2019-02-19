@@ -12,7 +12,7 @@
             "name": "[parameters('accountName')]",
             "type": "Microsoft.Automation/automationAccounts",
             "apiVersion": "2015-10-31",
-            "location": "eastus",
+            "location": "eastus2",
             "dependsOn": [],
             "tags": {},
             "properties": {
