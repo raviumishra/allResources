@@ -176,7 +176,7 @@
             "loganalyticsResourceGroup": "[toupper(concat('gav-',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-mon','-lan-','001'))]",
             "virtualNetwork": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','vn-','001'))]",
             "keyVault": "[tolower(concat('gav',parameters('shortLocation'),parameters('Application_Acronym'),'dr','sec','kvt','001'))]",
-            "loganalyticsWorkspace": "[tolower(concat('gav',parameters('shortLocation'),parameters('Application_Acronym'),'-mon','-lan','001'))]",
+            "loganalyticsWorkspace": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-mon','-lan','001'))]",
             "automationAccount": "[tolower(concat('gav',parameters('shortLocation'),parameters('Application_Acronym'),'-mon','-lan','001'))]",
             "applicationGateway": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','vgw-','001'))]",
             "networkSecurityGroup": "[tolower(concat('GAV',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-',parameters('Environment_Category'),'-','nsg','-','00'))]",
