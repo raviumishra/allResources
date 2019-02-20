@@ -217,7 +217,9 @@
             "name": "[parameters('applicationGatewayName')]",
             "type": "Microsoft.Network/applicationGateways",
             "location": "[resourceGroup().location]",
-            "dependsOn": [],
+            "dependsOn": [
+                "[parameters('virtualNetworkName')]"
+            ],
             "properties": {
                 "sku": {
                     "name": "[parameters('applicationGatewaySize')]",
@@ -312,7 +314,9 @@
             "sku": {
                 "name": "Basic"
             },
-            "dependsOn": [],
+            "dependsOn": [
+                "[parameters('virtualNetworkName')]"
+            ],
             "properties": {
                 "frontendIPConfigurations": [
                     {
@@ -336,7 +340,9 @@
             "sku": {
                 "name": "Basic"
             },
-            "dependsOn": [],
+            "dependsOn": [
+                "[parameters('virtualNetworkName')]"
+            ],
             "properties": {
                 "frontendIPConfigurations": [
                     {
@@ -360,7 +366,9 @@
             "sku": {
                 "name": "Basic"
             },
-            "dependsOn": [],
+            "dependsOn": [
+                "[parameters('virtualNetworkName')]"
+            ],
             "properties": {
                 "frontendIPConfigurations": [
                     {
@@ -384,7 +392,9 @@
             "sku": {
                 "name": "Basic"
             },
-            "dependsOn": [],
+            "dependsOn": [
+                "[parameters('virtualNetworkName')]"
+            ],
             "properties": {
                 "frontendIPConfigurations": [
                     {
