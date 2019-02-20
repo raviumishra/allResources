@@ -103,23 +103,23 @@
         },
         "address_Prefixes": {
             "type": "object",
-            "defaultValue": {}
+            "defaultValue": ""
         },
         "emsManagerILB": {
             "type": "object",
-            "defaultValue": {}
+            "defaultValue": ""
         },
         "webapiILB": {
             "type": "object",
-            "defaultValue": {}
+            "defaultValue": ""
         },
         "sqlILB": {
             "type": "object",
-            "defaultValue": {}
+            "defaultValue": ""
         },
         "jumpboxILB": {
             "type": "object",
-            "defaultValue": {}
+            "defaultValue": ""
         },
         "keyVault_accessPolicies": {
             "type": "array",
@@ -167,22 +167,17 @@
         }
     },
     "variables": {
-        "resource_Location": "Central US",
-        "applicationGatewaySubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('resourceNames').virtualNetwork, parameters('subnet_Names').appgateway)]",
-        "emsManagerSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('resourceNames').virtualNetwork, parameters('subnet_Names').manager)]",
-        "webapiSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('resourceNames').virtualNetwork, parameters('subnet_Names').webapi)]",
-        "sqlSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('resourceNames').virtualNetwork, parameters('subnet_Names').sql)]",
-        "jumpboxSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('resourceNames').virtualNetwork, parameters('subnet_Names').jumpbox)]",
+        "resource_Location": "central us",
         "resourceNames": {
             "vnetResourceGroup": "[toupper(concat('gav-',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','vn-','001'))]",
             "automationAccountResourceGroup": "[toupper(concat('gav-',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','vgw-','001'))]",
             "backupResourceGroup": "[toupper(concat('gav-',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','bkp-','vgw-','001'))]",
             "keyValutResourceGroup": "[toupper(concat('gav-',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-dr','-sec','-kvt-','001'))]",
             "loganalyticsResourceGroup": "[toupper(concat('gav-',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-mon','-lan-','001'))]",
+            "virtualNetwork": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','vn-','001'))]",
             "keyVault": "[tolower(concat('gav',parameters('shortLocation'),parameters('Application_Acronym'),'dr','sec','kvt','001'))]",
             "loganalyticsWorkspace": "[tolower(concat('gav',parameters('shortLocation'),parameters('Application_Acronym'),'-mon','-lan','001'))]",
             "automationAccount": "[tolower(concat('gav',parameters('shortLocation'),parameters('Application_Acronym'),'-mon','-lan','001'))]",
-            "virtualNetwork": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','vn-','001'))]",
             "applicationGateway": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','vgw-','001'))]",
             "networkSecurityGroup": "[tolower(concat('GAV',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-',parameters('Environment_Category'),'-','nsg','-','00'))]",
             "loadbalancer": "[tolower(concat('gav',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-','dr','-','net-','ilb-'))]",
@@ -282,30 +277,6 @@
                     },
                     "nsgName": {
                         "value": "[parameters('Subnet_nsgNames')]"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "resourcegroup": "[variables('resourceNames').vnetResourceGroup]",
-            "name": "applicationGateway",
-            "apiVersion": "2018-05-01",
-            "dependsOn": [
-                "virtualNetwork"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('tempalteURLs').applicationGateway]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "resource_Location": {
-                        "value": "[variables('resource_Location')]"
-                    },
-                    "applicationGatewaySubnetRef": {
-                        "value": "[variables('applicationGatewaySubnetRef')]"
                     },
                     "applicationGatewayName": {
                         "value": "[variables('resourceNames').applicationGateway]"
@@ -327,48 +298,18 @@
                     },
                     "cookieBasedAffinity": {
                         "value": "[parameters('applicationGateway_cookieBasedAffinity')]"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "resourcegroup": "[variables('resourceNames').vnetResourceGroup]",
-            "name": "loadbalancers",
-            "apiVersion": "2018-05-01",
-            "dependsOn": [
-                "virtualNetwork"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('tempalteURLs').loadbalancer]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
+                    },
                     "emsManagerILB": {
                         "value": "[parameters('emsManagerILB')]"
-                    },
-                    "emsManagerSubnetRef": {
-                        "value": "[variables('emsManagerSubnetRef')]"
                     },
                     "webapiILB": {
                         "value": "[parameters('webapiILB')]"
                     },
-                    "webapiSubnetRef": {
-                        "value": "[variables('webapiSubnetRef')]"
-                    },
                     "sqlILB": {
                         "value": "[parameters('sqlILB')]"
                     },
-                    "sqlSubnetRef": {
-                        "value": "[variables('sqlSubnetRef')]"
-                    },
                     "jumpboxILB": {
                         "value": "[parameters('jumpboxILB')]"
-                    },
-                    "jumpboxSubnetRef": {
-                        "value": "[variables('jumpboxSubnetRef')]"
                     }
                 }
             }
