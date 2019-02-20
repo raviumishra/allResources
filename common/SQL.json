@@ -112,13 +112,9 @@
             "resources": [
                 {
                     "type": "extensions",
-                    "name": "[concat(parameters('virtualmachineName'), copyindex(1), '/joindomain')]",
+                    "name": "[concat(parameters('virtualmachineName'),'/joindomain')]",
                     "location": "[resourceGroup().location]",
                     "apiVersion": "2015-06-15",
-                    "copy": {
-                        "name": "domainjoinloop",
-                        "count": "[parameters('numberofSQLVM')]"
-                    },
                     "properties": {
                         "publisher": "Microsoft.Compute",
                         "type": "JsonADDomainExtension",
