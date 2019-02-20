@@ -115,6 +115,9 @@
                     "name": "domainJoin",
                     "location": "[resourceGroup().location]",
                     "apiVersion": "2015-06-15",
+                    "dependson": [
+                        "[concat(parameters('virtualmachineName'), copyIndex(1))]"
+                    ],
                     "properties": {
                         "publisher": "Microsoft.Compute",
                         "type": "JsonADDomainExtension",
@@ -137,6 +140,9 @@
                     "name": "logAnalytics",
                     "apiVersion": "2015-06-15",
                     "location": "[resourcegroup().location]",
+                    "dependson": [
+                        "[concat(parameters('virtualmachineName'), copyIndex(1))]"
+                    ],
                     "properties": {
                         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
                         "type": "MicrosoftMonitoringAgent",
