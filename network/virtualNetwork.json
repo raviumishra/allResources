@@ -23,9 +23,6 @@
         "applicationGatewayInstanceCount": {
             "type": "int"
         },
-        "applicationGatewaySubnetRef": {
-            "type": "string"
-        },
         "frontendPort": {
             "type": "int"
         },
