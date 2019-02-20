@@ -242,7 +242,7 @@
                         "name": "appGatewayFrontendIP",
                         "properties": {
                             "subnet": {
-                                "id": "[parameters('applicationGatewaySubnetRef')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnet_Names').appgateway)]"
                             }
                         }
                     }
