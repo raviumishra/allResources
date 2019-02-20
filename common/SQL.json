@@ -112,7 +112,7 @@
             "resources": [
                 {
                     "type": "extensions",
-                    "name": "[concat(parameters('virtualmachineName'),'/joindomain')]",
+                    "name": "domainJoin",
                     "location": "[resourceGroup().location]",
                     "apiVersion": "2015-06-15",
                     "properties": {
@@ -134,7 +134,7 @@
                 },
                 {
                     "type": "extensions",
-                    "name": "[concat(parameters('virtualmachineName'), '/omsAgent')]",
+                    "name": "logAnalytics",
                     "apiVersion": "2015-06-15",
                     "location": "[resourcegroup().location]",
                     "properties": {
