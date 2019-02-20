@@ -134,13 +134,9 @@
                 },
                 {
                     "type": "extensions",
-                    "name": "[concat(parameters('virtualmachineName'), copyindex(1), '/omsAgent')]",
+                    "name": "[concat(parameters('virtualmachineName'), '/omsAgent')]",
                     "apiVersion": "2015-06-15",
                     "location": "[resourcegroup().location]",
-                    "copy": {
-                        "name": "omsAgentloop",
-                        "count": "[parameters('numberofSQLVM')]"
-                    },
                     "properties": {
                         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
                         "type": "MicrosoftMonitoringAgent",
