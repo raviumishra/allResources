@@ -104,7 +104,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "/subscriptions/4f911ca4-870d-4fb6-894b-6814ecd3776d/resourceGroups/GAV-CU-EMS-DR-NET-VN-001/providers/Microsoft.Network/virtualNetworks/gavcu-ems-dr-net-vn-001"
+                            "id": "/subscriptions/4f911ca4-870d-4fb6-894b-6814ecd3776d/resourceGroups/GAV-CU-EMS-DR-NET-VN-001/providers/Microsoft.Network/networkInterfaces/gavcu-ems-dr-web-nic-001"
                         }
                     ]
                 }
