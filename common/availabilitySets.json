@@ -8,7 +8,6 @@
     },
     "variables": {
         "avsetSuffix": [
-            "-sql",
             "-jumpbox"
         ]
     },
@@ -17,19 +16,6 @@
             "type": "Microsoft.Compute/availabilitySets",
             "apiVersion": "2018-10-01",
             "name": "[concat(parameters('availabilitySetName'),variables('avsetSuffix')[0])]",
-            "location": "[resourcegroup().location]",
-            "properties": {
-                "platformFaultDomainCount": 2,
-                "platformUpdateDomainCount": 3
-            },
-            "sku": {
-                "name": "Aligned"
-            }
-        },
-        {
-            "type": "Microsoft.Compute/availabilitySets",
-            "apiVersion": "2018-10-01",
-            "name": "[concat(parameters('availabilitySetName'),variables('avsetSuffix')[1])]",
             "location": "[resourcegroup().location]",
             "properties": {
                 "platformFaultDomainCount": 2,
