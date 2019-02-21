@@ -48,9 +48,6 @@
         "DataDiskSize": {
             "type": "int"
         },
-        "numberofSQLVM": {
-            "type": "int"
-        },
         "domainName": {
             "type": "string"
         },
@@ -144,7 +141,7 @@
             "location": "[resourcegroup().location]",
             "copy": {
                 "name": "virtualMachineLoop",
-                "count": "[parameters('numberofSQLVM')]"
+                "count": "[parameters('ad_vmCount')]"
             },
             "dependsOn": [],
             "properties": {
