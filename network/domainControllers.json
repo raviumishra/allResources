@@ -24,6 +24,12 @@
         "virtualMachineSize": {
             "type": "string"
         },
+        "vnetResourceGroup": {
+            "type": "string"
+        },
+        "virtualNetwork": {
+            "type": "string"
+        },
         "ad_SubnetRef": {
             "type": "string"
         },
@@ -100,7 +106,7 @@
                         "properties": {
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[parameters('ad_SubnetRef')]"
+                                "id": "[resourceId(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('virtualNetwork'), parameters('ad_SubnetRef'))]"
                             },
                             "privateIPAddress": "[parameters('ad_ILB').IP]"
                         }
@@ -114,7 +120,7 @@
             "apiVersion": "2018-05-01",
             "location": "[resourcegroup().location]",
             "copy": {
-                "name": "pdcnicLoop",
+                "name": "nicLoop",
                 "count": "[parameters('ad_vmCount')]"
             },
             "dependsOn": [],
@@ -127,7 +133,7 @@
                             "privateIpAddressVersion": "IPv4",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[parameters('ad_SubnetRef')]"
+                                "id": "[resourceId(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('virtualNetwork'), parameters('ad_SubnetRef'))]"
                             }
                         }
                     }
@@ -143,7 +149,9 @@
                 "name": "virtualMachineLoop",
                 "count": "[parameters('ad_vmCount')]"
             },
-            "dependsOn": [],
+            "dependsOn": [
+                "nicLoop"
+            ],
             "properties": {
                 "availabilitySet": "[if(equals(parameters('AvailabilitySet'), 'Yes'), variables('availabilitySetId'), json('null'))]",
                 "hardwareProfile": {
