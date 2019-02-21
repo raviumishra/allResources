@@ -1,93 +1,63 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "shortLocation": {
-            "type": "string",
-            "maxLength": 3,
-            "metadata": {
-                "description": "3 chars. E.g. East US - EU, West US - WU, East US 2 - EU2"
-            },
-            "defaultValue": ""
-        },
-        "Application_Acronym": {
-            "type": "string",
-            "maxLength": 3,
-            "metadata": {
-                "description": "3 chars e.g. nxt (Next Net), ems"
-            },
-            "defaultValue": ""
-        },
-        "keyVault_accessPolicies": {
-            "type": "string",
-            "defaultvalue": [
-                {
-                    "tenantId": "'[subcription().tenantid]",
-                    "objectId": "39e172af-4e3c-44df-ad4b-98c56bff49ac",
-                    "permissions": {
-                        "secrets": [
-                            "all"
-                        ]
-                    }
-                }
-            ]
-        },
-        "keyVault_secretsObject": {
-            "type": "string",
-            "value": {
-                "secrets": [
-                    {
-                        "secretName": "domainAdmin",
-                        "secretValue": "Testuser@123"
-                    }
-                ]
-            }
-        },
-        "artifacts_baseUri": {
-            "type": "string",
-            "defaultValue": ""
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "keyVaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Key Vault"
+      }
     },
-    "variables": {
-        "resource_Location": "central us",
-        "keyValutResourceGroup": "[toupper(concat('gav-',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-dr','-sec','-kvt-','001'))]",
-        "keyVaultName": "[tolower(concat('gav',parameters('shortLocation'),parameters('Application_Acronym'),'dr','sec','kvt','001'))]",
-        "keyVaultTemplate": "[concat(parameters('artifacts_baseUri'),'/allResources/master/network/keyVault.json')]"
+    "keyVault_accessPolicies": {
+      "type": "array",
+      "defaultValue": "{}",
+      "metadata": {
+        "description": "Access policies object {\"tenantId\":\"\",\"objectId\":\"\",\"permissions\":{\"keys\":[\"\"],\"secrets\":[\"\"]}}"
+      }
     },
-    "resources": [
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2018-05-01",
-            "location": "[variables('resource_Location')]",
-            "name": "[variables('keyValutResourceGroup')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "resourcegroup": "[variables('keyValutResourceGroup')]",
-            "name": "keyVault",
-            "apiVersion": "2018-05-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', variables('keyValutResourceGroup'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('keyVaultTemplate')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultName')]"
-                    },
-                    "accessPolicies": {
-                        "value": "[parameters('keyVault_accessPolicies')]"
-                    },
-                    "secretsObject": {
-                        "value": "[parameters('keyVault_secretsObject')]"
-                    }
-                }
-            }
+    "keyVault_secretsObject": {
+      "type": "secureObject",
+      "defaultValue": "{}",
+      "metadata": {
+        "description": "all secrets {\"secretName\":\"\",\"secretValue\":\"\"} wrapped in a secure object"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "name": "[parameters('keyVaultName')]",
+      "apiVersion": "2015-06-01",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "KeyVault"
+      },
+      "properties": {
+        "enabledForDeployment": true,
+        "enabledForTemplateDeployment": true,
+        "enabledForVolumeEncryption": true,
+        "tenantId": "[subscription().tenantId]",
+        "accessPolicies": "[parameters('keyVault_accessPolicies')]",
+        "sku": {
+          "name": "Standard",
+          "family": "A"
         }
-    ]
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "name": "[concat(parameters('keyVaultName'), '/', parameters('keyVault_secretsObject').secrets[copyIndex()].secretName)]",
+      "apiVersion": "2015-06-01",
+      "properties": {
+        "value": "[parameters('keyVault_secretsObject').secrets[copyIndex()].secretValue]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+      ],
+      "copy": {
+        "name": "secretsCopy",
+        "count": "[length(parameters('keyVault_secretsObject').secrets)]"
+      }
+    }
+  ]
 }
