@@ -8,14 +8,52 @@
         "description": "Name of the Key Vault"
       }
     },
-    "keyVault_accessPolicies": {
+    "tenantId": {
+      "type": "string",
+      "metadata": {
+        "description": "Tenant Id for the subscription and use assigned access to the vault. Available from the Get-AzureRMSubscription PowerShell cmdlet"
+      }
+    },
+    "accessPolicies": {
       "type": "array",
       "defaultValue": "{}",
       "metadata": {
         "description": "Access policies object {\"tenantId\":\"\",\"objectId\":\"\",\"permissions\":{\"keys\":[\"\"],\"secrets\":[\"\"]}}"
       }
     },
-    "keyVault_secretsObject": {
+    "vaultSku": {
+      "type": "string",
+      "defaultValue": "Standard",
+      "allowedValues": [
+        "Standard",
+        "Premium"
+      ],
+      "metadata": {
+        "description": "SKU for the vault"
+      }
+    },
+    "enabledForDeployment": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Specifies if the vault is enabled for VM or Service Fabric deployment"
+      }
+    },
+    "enabledForTemplateDeployment": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Specifies if the vault is enabled for ARM template deployment"
+      }
+    },
+    "enableVaultForVolumeEncryption": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Specifies if the vault is enabled for volume encryption"
+      }
+    },
+    "secretsObject": {
       "type": "secureObject",
       "defaultValue": "{}",
       "metadata": {
@@ -33,30 +71,30 @@
         "displayName": "KeyVault"
       },
       "properties": {
-        "enabledForDeployment": true,
-        "enabledForTemplateDeployment": true,
-        "enabledForVolumeEncryption": true,
-        "tenantId": "[subscription().subscriptionId]",
-        "accessPolicies": "[parameters('keyVault_accessPolicies')]",
+        "enabledForDeployment": "[parameters('enabledForDeployment')]",
+        "enabledForTemplateDeployment": "[parameters('enabledForTemplateDeployment')]",
+        "enabledForVolumeEncryption": "[parameters('enableVaultForVolumeEncryption')]",
+        "tenantId": "[parameters('tenantId')]",
+        "accessPolicies": "[parameters('accessPolicies')]",
         "sku": {
-          "name": "Standard",
+          "name": "[parameters('vaultSku')]",
           "family": "A"
         }
       }
     },
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
-      "name": "[concat(parameters('keyVaultName'), '/', parameters('keyVault_secretsObject').secrets[copyIndex()].secretName)]",
+      "name": "[concat(parameters('keyVaultName'), '/', parameters('secretsObject').secrets[copyIndex()].secretName)]",
       "apiVersion": "2015-06-01",
       "properties": {
-        "value": "[parameters('keyVault_secretsObject').secrets[copyIndex()].secretValue]"
+        "value": "[parameters('secretsObject').secrets[copyIndex()].secretValue]"
       },
       "dependsOn": [
         "[concat('Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
       ],
       "copy": {
         "name": "secretsCopy",
-        "count": "[length(parameters('keyVault_secretsObject').secrets)]"
+        "count": "[length(parameters('secretsObject').secrets)]"
       }
     }
   ]
