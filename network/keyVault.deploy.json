@@ -1,0 +1,83 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "shortLocation": {
+            "type": "string",
+            "maxLength": 3,
+            "metadata": {
+                "description": "3 chars. E.g. East US - EU, West US - WU, East US 2 - EU2"
+            },
+            "defaultValue": ""
+        },
+        "Application_Acronym": {
+            "type": "string",
+            "maxLength": 3,
+            "metadata": {
+                "description": "3 chars e.g. nxt (Next Net), ems"
+            },
+            "defaultValue": ""
+        },
+        "keyVault_accessPolicies": {
+            "type": "array",
+            "defaultValue": ""
+        },
+        "keyVault_secretsObject": {
+            "type": "secureObject",
+            "defaultValue": {
+                "secrets": [
+                    {
+                        "secretName": "",
+                        "secretValue": ""
+                    }
+                ]
+            }
+        },
+        "artifacts_baseUri": {
+            "type": "string",
+            "defaultValue": ""
+        }
+    },
+    "variables": {
+        "resource_Location": "central us",
+        "keyValutResourceGroup": "[toupper(concat('gav-',parameters('shortLocation'),'-',parameters('Application_Acronym'),'-dr','-sec','-kvt-','001'))]",
+        "keyVaultName": "[tolower(concat('gav',parameters('shortLocation'),parameters('Application_Acronym'),'dr','sec','kvt','001'))]",
+        "keyVaultTemplate": "[concat(parameters('artifacts_baseUri'),'/allResources/master/network/keyVault.json')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "location": "[variables('resource_Location')]",
+            "name": "[variables('keyValutResourceGroup')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "resourcegroup": "[variables('keyValutResourceGroup')]",
+            "name": "keyVault",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', variables('keyValutResourceGroup'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('keyVaultTemplate')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultName')]"
+                    },
+                    "keyVault_accessPolicies": {
+                        "value": "[parameters('keyVault_accessPolicies')]"
+                    },
+                    "keyVault_secretsObject": {
+                        "value": "[parameters('keyVault_secretsObject')]"
+                    }
+                }
+            }
+        }
+    ]
+}
