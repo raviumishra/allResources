@@ -31,13 +31,13 @@
             "type": "string"
         },
         "ad_SubnetRef": {
-            "type": "string"
+            "type": "object"
         },
         "networkInterfaceName": {
             "type": "string"
         },
         "domainController_IPs": {
-            "type": "object"
+            "type": "array"
         },
         "StorageAccountType": {
             "type": "string"
@@ -106,7 +106,7 @@
                         "properties": {
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[resourceId(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('virtualNetwork'), parameters('ad_SubnetRef'))]"
+                                "id": "/subscriptions/4f911ca4-870d-4fb6-894b-6814ecd3776d/resourceGroups/GAV-CU-EMS-DR-NET-VN-001/providers/Microsoft.Network/virtualNetworks/gavcu-ems-dr-net-vn-001/subnets/adSubnet"
                             },
                             "privateIPAddress": "[parameters('ad_ILB').IP]"
                         }
@@ -129,11 +129,11 @@
                     {
                         "name": "ipconfig1",
                         "properties": {
-                            "privateIpAddress": "[parameters('domainController_IPs')]",
+                            "privateIpAddress": "[concat(parameters('domainController_IPs')[copyindex()])]",
                             "privateIpAddressVersion": "IPv4",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[resourceId(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('virtualNetwork'), parameters('ad_SubnetRef'))]"
+                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('vnetResourceGroup'),'/providers/Microsoft.Network/virtualNetworks/',parameters('virtualNetwork'),'/subnets/',parameters('ad_SubnetRef').ad)]"
                             }
                         }
                     }
