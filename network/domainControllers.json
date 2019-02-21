@@ -12,89 +12,26 @@
         "availabilitySetName": {
             "type": "string"
         },
-        "vmCount": {
+        "ad_vmCount": {
             "type": "int"
         },
-        "adILBName": {
-            "type": "string"
+        "ad_ILB": {
+            "type": "object"
         },
-        "pdc-virtualmachineName": {
-            "type": "string"
-        },
-        "bdc-virtualmachineName": {
-            "type": "string"
-        },
-        "nicCount": {
-            "type": "int"
-        },
-        "adInternalLoadBalancerIP": {
-            "type": "string"
-        },
-        "pdc_networkInterfaceIP": {
-            "type": "string"
-        },
-        "bdc-networkInterfaceIP": {
+        "virtualmachineName": {
             "type": "string"
         },
         "virtualMachineSize": {
             "type": "string"
         },
-        "Subnet1Ref": {
-            "type": "string"
-        },
-        "pdc-networkInterfaceName": {
-            "type": "string"
-        },
-        "bdc-networkInterfaceName": {
-            "type": "string"
-        },
-        "StorageAccountType": {
-            "type": "string"
-        },
-        "numberOfDataDisks": {
-            "type": "int"
-        },
-        "pdc-osDiskName": {
-            "type": "string"
-        },
-        "pdc-dataDiskName": {
-            "type": "string"
-        },
-        "bdc-osDiskName": {
-            "type": "string"
-        },
-        "bdc-dataDiskName": {
-            "type": "string"
-        },
-        "DataDiskSize": {
-            "type": "int"
-        },
-        "adminUsername": {
-            "type": "string"
-        },
-        "adminPassword": {
-            "type": "securestring"
-        },
-        "omsWorkspaceResourceGroup": {
-            "type": "string"
-        },
-        "omsWorkspaceName": {
-            "type": "string"
-        },
-        "numberofSQLVM": {
-            "type": "int"
-        },
-        "virtualmachineName": {
+        "ad_SubnetRef": {
             "type": "string"
         },
         "networkInterfaceName": {
             "type": "string"
         },
-        "virtualMachineSize": {
-            "type": "string"
-        },
-        "osDiskName": {
-            "type": "string"
+        "domainController_IPs": {
+            "type": "object"
         },
         "StorageAccountType": {
             "type": "string"
@@ -102,17 +39,17 @@
         "numberOfDataDisks": {
             "type": "int"
         },
-        "DataDiskSize": {
-            "type": "int"
+        "osDiskName": {
+            "type": "string"
         },
         "dataDiskName": {
             "type": "string"
         },
-        "adminUsername": {
-            "type": "string"
+        "DataDiskSize": {
+            "type": "int"
         },
-        "adminPassword": {
-            "type": "securestring"
+        "numberofSQLVM": {
+            "type": "int"
         },
         "domainName": {
             "type": "string"
@@ -152,7 +89,7 @@
         },
         {
             "apiVersion": "2018-08-01",
-            "name": "[parameters('adILBName')]",
+            "name": "[parameters('ad_ILB').Name]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -166,9 +103,9 @@
                         "properties": {
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[parameters('Subnet1Ref')]"
+                                "id": "[parameters('ad_SubnetRef')]"
                             },
-                            "privateIPAddress": "[parameters('adInternalLoadBalancerIP')]"
+                            "privateIPAddress": "[parameters('ad_ILB').IP]"
                         }
                     }
                 ]
@@ -176,12 +113,12 @@
         },
         {
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(parameters('pdc-networkInterfaceName'), copyindex(1))]",
+            "name": "[concat(parameters('networkInterfaceName'), copyindex(1))]",
             "apiVersion": "2018-05-01",
             "location": "[resourcegroup().location]",
             "copy": {
                 "name": "pdcnicLoop",
-                "count": "[parameters('nicCount')]"
+                "count": "[parameters('ad_vmCount')]"
             },
             "dependsOn": [],
             "properties": {
@@ -189,11 +126,11 @@
                     {
                         "name": "ipconfig1",
                         "properties": {
-                            "privateIpAddress": "[parameters('pdc_networkInterfaceIP')]",
+                            "privateIpAddress": "[parameters('domainController_IPs')]",
                             "privateIpAddressVersion": "IPv4",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[parameters('Subnet1Ref')]"
+                                "id": "[parameters('ad_SubnetRef')]"
                             }
                         }
                     }
@@ -211,13 +148,14 @@
             },
             "dependsOn": [],
             "properties": {
+                "availabilitySet": "[if(equals(parameters('AvailabilitySet'), 'Yes'), variables('availabilitySetId'), json('null'))]",
                 "hardwareProfile": {
                     "vmSize": "[parameters('virtualMachineSize')]"
                 },
                 "osProfile": {
                     "computerName": "[concat(parameters('virtualmachineName'),copyIndex(1))]",
-                    "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]"
+                    "adminUsername": "[parameters('DomainUserName')]",
+                    "adminPassword": "[parameters('DomainPassword')]"
                 },
                 "storageProfile": {
                     "imageReference": {
@@ -251,7 +189,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('pdc-networkInterfaceName'), copyindex(1)))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('networkInterfaceName'), copyindex(1)))]"
                         }
                     ]
                 }
