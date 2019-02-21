@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "shortLocation": {
@@ -18,19 +18,50 @@
             },
             "defaultValue": ""
         },
-        "keyVault_accessPolicies": {
+        "accessPolicies": {
             "type": "array",
-            "defaultValue": ""
+            "defaultValue": "{}",
+            "metadata": {
+                "description": "Access policies object {\"tenantId\":\"\",\"objectId\":\"\",\"permissions\":{\"keys\":[\"\"],\"secrets\":[\"\"]}}"
+            }
         },
-        "keyVault_secretsObject": {
+        "vaultSku": {
+            "type": "string",
+            "defaultValue": "Standard",
+            "allowedValues": [
+                "Standard",
+                "Premium"
+            ],
+            "metadata": {
+                "description": "SKU for the vault"
+            }
+        },
+        "enabledForDeployment": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Specifies if the vault is enabled for VM or Service Fabric deployment"
+            }
+        },
+        "enabledForTemplateDeployment": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Specifies if the vault is enabled for ARM template deployment"
+            }
+        },
+        "enableVaultForVolumeEncryption": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Specifies if the vault is enabled for volume encryption"
+            }
+        },
+        "secretsObject": {
             "type": "secureObject",
-            "defaultValue": {
-                "secrets": [
-                    {
-                        "secretName": "",
-                        "secretValue": ""
-                    }
-                ]
+            "defaultValue": "{}",
+            "metadata": {
+                "description": "all secrets {\"secretName\":\"\",\"secretValue\":\"\"} wrapped in a secure object"
             }
         },
         "artifacts_baseUri": {
@@ -67,14 +98,32 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
+                    "resource_Location": {
+                        "value": "[variables('resource_Location')]"
+                    },
                     "keyVaultName": {
                         "value": "[variables('keyVaultName')]"
                     },
-                    "keyVault_accessPolicies": {
-                        "value": "[parameters('keyVault_accessPolicies')]"
+                    "tenantId": {
+                        "value": "[subscription().tenantId]"
                     },
-                    "keyVault_secretsObject": {
-                        "value": "[parameters('keyVault_secretsObject')]"
+                    "accessPolicies": {
+                        "value": "[parameters('accessPolicies')]"
+                    },
+                    "vaultSku": {
+                        "value": "[parameters('vaultSku')]"
+                    },
+                    "enabledForDeployment": {
+                        "value": "[parameters('enabledForDeployment')]"
+                    },
+                    "enabledForTemplateDeployment": {
+                        "value": "[parameters('enabledForTemplateDeployment')]"
+                    },
+                    "enableVaultForVolumeEncryption": {
+                        "value": "[parameters('enableVaultForVolumeEncryption')]"
+                    },
+                    "secretsObject": {
+                        "value": "[parameters('secretsObject')]"
                     }
                 }
             }
