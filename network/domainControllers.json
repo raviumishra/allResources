@@ -119,6 +119,9 @@
             "name": "[concat(parameters('networkInterfaceName'), copyindex(1))]",
             "apiVersion": "2018-05-01",
             "location": "[resourcegroup().location]",
+            "tags": {
+                "Role": "DomainController"
+            },
             "copy": {
                 "name": "nicLoop",
                 "count": "[parameters('ad_vmCount')]"
@@ -129,7 +132,7 @@
                     {
                         "name": "ipconfig1",
                         "properties": {
-                            "privateIpAddress": "[concat(parameters('domainController_IPs')[copyindex()])]",
+                            "privateIpAddress": "[parameters('domainController_IPs')[copyindex()]]",
                             "privateIpAddressVersion": "IPv4",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
