@@ -4,15 +4,24 @@
     "parameters": {
         "accountName": {
             "type": "string"
+        },
+        "AzureRM.profile_Module_URL": {
+            "type": "string"
+        },
+        "AzureRM.Network_Module_URL": {
+            "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+        "runbookDescription": "Configures the VNET for DNS server with Primary domain controller IP",
+        "RunbookUri": "https://raw.githubusercontent.com/hanuravim/allResources/master/network/vnetDNS.ps1"
+    },
     "resources": [
         {
             "name": "[parameters('accountName')]",
             "type": "Microsoft.Automation/automationAccounts",
             "apiVersion": "2015-10-31",
-            "location": "eastus2",
+            "location": "[resourceGroup().location]",
             "dependsOn": [],
             "tags": {},
             "properties": {
@@ -21,6 +30,56 @@
                 }
             },
             "resources": []
+        },
+        {
+            "name": "AzureRM.profile",
+            "type": "Modules",
+            "apiVersion": "2015-10-31",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
+            ],
+            "tags": {},
+            "properties": {
+                "contentLink": {
+                    "uri": "[parameters('AzureRM.profile_Module_URL')]"
+                }
+            }
+        },
+        {
+            "name": "AzureRM.Network",
+            "type": "Modules",
+            "apiVersion": "2015-10-31",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
+            ],
+            "tags": {},
+            "properties": {
+                "contentLink": {
+                    "uri": "[parameters('AzureRM.Network_Module_URL')]"
+                }
+            }
+        },
+        {
+            "name": "vnetDNS",
+            "type": "runbooks",
+            "apiVersion": "2015-10-31",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
+            ],
+            "tags": {},
+            "properties": {
+                "runbookType": "Script",
+                "logProgress": false,
+                "logVerbose": false,
+                "description": "[variables('runbookDescription')]",
+                "publishContentLink": {
+                    "uri": "[variables('RunbookUri')]",
+                    "version": "1.0.0.0"
+                }
+            }
         }
     ],
     "outputs": {}
