@@ -10,11 +10,13 @@
         },
         "AzureRM.Network_Module_URL": {
             "type": "string"
+        },
+        "RunbookUri": {
+            "type": "string"
         }
     },
     "variables": {
-        "runbookDescription": "Configures the VNET for DNS server with Primary domain controller IP",
-        "RunbookUri": "https://raw.githubusercontent.com/hanuravim/allResources/master/network/vnetDNS.ps1"
+        "runbookDescription": "Configures the VNET for DNS server with Primary domain controller IP"
     },
     "resources": [
         {
@@ -76,7 +78,7 @@
                 "logVerbose": false,
                 "description": "[variables('runbookDescription')]",
                 "publishContentLink": {
-                    "uri": "[variables('RunbookUri')]",
+                    "uri": "[parameters('RunbookUri')]",
                     "version": "1.0.0.0"
                 }
             }
