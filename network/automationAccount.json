@@ -22,7 +22,7 @@
         {
             "name": "[parameters('accountName')]",
             "type": "Microsoft.Automation/automationAccounts",
-            "apiVersion": "2015-10-31",
+            "apiVersion": "2018-10-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [],
             "tags": {},
@@ -36,7 +36,7 @@
         {
             "name": "AzureRM.profile",
             "type": "Modules",
-            "apiVersion": "2015-10-31",
+            "apiVersion": "2018-10-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
@@ -51,7 +51,7 @@
         {
             "name": "AzureRM.Network",
             "type": "Modules",
-            "apiVersion": "2015-10-31",
+            "apiVersion": "2018-10-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
@@ -66,7 +66,7 @@
         {
             "name": "vnetDNS",
             "type": "runbooks",
-            "apiVersion": "2015-10-31",
+            "apiVersion": "2018-10-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
