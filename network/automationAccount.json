@@ -34,7 +34,7 @@
             "resources": []
         },
         {
-            "name": "Automation/Modules/AzureRM.profile",
+            "name": "Automation/Modules/AzureRM/profile",
             "type": "Microsoft.Automation/automationAccounts/modules",
             "apiVersion": "2018-10-01",
             "location": "[resourceGroup().location]",
@@ -49,7 +49,7 @@
             }
         },
         {
-            "name": "Automation/Modules/AzureRM.profile",
+            "name": "Automation/Modules/AzureRM/network",
             "type": "Microsoft.Automation/automationAccounts/modules",
             "apiVersion": "2018-10-01",
             "location": "[resourceGroup().location]",
