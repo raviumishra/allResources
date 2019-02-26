@@ -11,7 +11,7 @@
         "AzureRM.Network_Module_URL": {
             "type": "string"
         },
-        "RunbookUri": {
+        "RunbookURL": {
             "type": "string"
         }
     },
@@ -78,7 +78,7 @@
                 "logVerbose": false,
                 "description": "[variables('runbookDescription')]",
                 "publishContentLink": {
-                    "uri": "[parameters('RunbookUri')]",
+                    "uri": "[parameters('RunbookURL')]",
                     "version": "1.0.0.0"
                 }
             }
