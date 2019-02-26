@@ -16,6 +16,8 @@
         }
     },
     "variables": {
+        "module1_Name": "AzureRM.profile",
+        "module2_Name": "AzureRM.Network",
         "runbookDescription": "Configures the VNET for DNS server with Primary domain controller IP"
     },
     "resources": [
@@ -34,7 +36,7 @@
             "resources": []
         },
         {
-            "name": "AzureRM.profile",
+            "name": "[variables('module1_Name')]",
             "type": "Microsoft.Automation/automationAccounts/modules",
             "apiVersion": "2018-10-01",
             "location": "[resourceGroup().location]",
@@ -49,7 +51,7 @@
             }
         },
         {
-            "name": "AzureRM.Network",
+            "name": "[variables('module2_Name')]",
             "type": "Microsoft.Automation/automationAccounts/modules",
             "apiVersion": "2018-10-01",
             "location": "[resourceGroup().location]",
