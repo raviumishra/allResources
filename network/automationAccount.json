@@ -23,7 +23,7 @@
             "name": "[parameters('accountName')]",
             "type": "Microsoft.Automation/automationAccounts",
             "apiVersion": "2018-10-01",
-            "location": "[resourceGroup().location]",
+            "location": "eastus2",
             "dependsOn": [],
             "tags": {},
             "properties": {
@@ -37,7 +37,7 @@
             "name": "[concat(parameters('accountName'), '/', 'AzureRM.profile')]",
             "type": "Microsoft.Automation/automationAccounts/modules",
             "apiVersion": "2018-10-01",
-            "location": "[resourceGroup().location]",
+            "location": "eastus2",
             "dependsOn": [
                 "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
             ],
@@ -52,7 +52,7 @@
             "name": "[concat(parameters('accountName'), '/', 'AzureRM.network')]",
             "type": "Microsoft.Automation/automationAccounts/modules",
             "apiVersion": "2018-10-01",
-            "location": "[resourceGroup().location]",
+            "location": "eastus2",
             "dependsOn": [
                 "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
             ],
@@ -67,7 +67,7 @@
             "name": "[concat(parameters('accountName'), '/', 'runbook')]",
             "type": "Microsoft.Automation/automationAccounts/runbooks",
             "apiVersion": "2018-10-01",
-            "location": "[resourceGroup().location]",
+            "location": "eastus2",
             "dependsOn": [
                 "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
             ],
