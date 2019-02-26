@@ -15,9 +15,7 @@
             "type": "string"
         }
     },
-    "variables": {
-        "runbookDescription": "Configures the VNET for DNS server with Primary domain controller IP"
-    },
+    "variables": {},
     "resources": [
         {
             "name": "[parameters('accountName')]",
@@ -76,7 +74,6 @@
                 "runbookType": "Script",
                 "logProgress": false,
                 "logVerbose": false,
-                "description": "[variables('runbookDescription')]",
                 "publishContentLink": {
                     "uri": "[parameters('RunbookUri')]",
                     "version": "1.0.0.0"
