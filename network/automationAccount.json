@@ -16,6 +16,21 @@
         },
         "webhookURL": {
             "type": "string"
+        },
+        "applicationId": {
+            "type": "string"
+        },
+        "appsecret": {
+            "type": "string"
+        },
+        "virtualNetworkResourceGroup": {
+            "type": "string"
+        },
+        "virtualnetworkname": {
+            "type": "string"
+        },
+        "pdc_networkInterfaceIP": {
+            "type": "string"
         }
     },
     "variables": {
@@ -85,6 +100,84 @@
                         "contentLink": {
                             "uri": "[parameters('AzureRM.Network_Module_URL')]"
                         }
+                    }
+                },
+                {
+                    "type": "Microsoft.Automation/automationAccounts/variables",
+                    "name": "[concat(parameters('automationAccount'),'/applicationId')]",
+                    "apiVersion": "2015-10-31",
+                    "location": "eastus2",
+                    "dependsOn": [
+                        "[parameters('automationAccount')]"
+                    ],
+                    "properties": {
+                        "description": "applicationId",
+                        "value": "[parameters('applicationId')]"
+                    }
+                },
+                {
+                    "type": "Microsoft.Automation/automationAccounts/variables",
+                    "name": "[concat(parameters('automationAccount'),'/tenantid')]",
+                    "apiVersion": "2015-10-31",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
+                    ],
+                    "properties": {
+                        "description": "tenantid",
+                        "value": "[concat('\"',subscription().tenantId,'\"')]"
+                    }
+                },
+                {
+                    "type": "Microsoft.Automation/automationAccounts/variables",
+                    "name": "[concat(parameters('automationAccount'),'/appsecret')]",
+                    "apiVersion": "2015-10-31",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
+                    ],
+                    "properties": {
+                        "description": "appsecret",
+                        "value": "[parameters('appsecret')]"
+                    }
+                },
+                {
+                    "type": "Microsoft.Automation/automationAccounts/variables",
+                    "name": "[concat(parameters('automationAccount'),'/virtualNetworkResourceGroup')]",
+                    "apiVersion": "2015-10-31",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
+                    ],
+                    "properties": {
+                        "description": "virtualNetworkResourceGroup",
+                        "value": "[parameters('virtualNetworkResourceGroup')]"
+                    }
+                },
+                {
+                    "type": "Microsoft.Automation/automationAccounts/variables",
+                    "name": "[concat(parameters('automationAccount'),'/virtualnetworkname')]",
+                    "apiVersion": "2015-10-31",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
+                    ],
+                    "properties": {
+                        "description": "virtualnetworkname",
+                        "value": "[parameters('virtualnetworkname')]"
+                    }
+                },
+                {
+                    "type": "Microsoft.Automation/automationAccounts/variables",
+                    "name": "[concat(parameters('automationAccount'),'/pdc_networkInterfaceIP')]",
+                    "apiVersion": "2015-10-31",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
+                    ],
+                    "properties": {
+                        "description": "pdc_networkInterfaceIP",
+                        "value": "[parameters('pdc_networkInterfaceIP')]"
                     }
                 },
                 {
