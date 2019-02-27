@@ -13,6 +13,9 @@
         },
         "RunbookURL": {
             "type": "string"
+        },
+        "webhookURL": {
+            "type": "string"
         }
     },
     "variables": {
@@ -93,7 +96,7 @@
                     ],
                     "properties": {
                         "isEnabled": true,
-                        "uri": "https://s5events.azure-automation.net/webhooks?token=hMSIbM2LZAEv4ZvHZUG4pCBJalbB9MYkUW6rOgEKLyY%3d",
+                        "uri": "[parameters('webhookURL')]",
                         "expiryTime": "2020-02-26 11:06:07 PM",
                         "parameters": {},
                         "runbook": {
