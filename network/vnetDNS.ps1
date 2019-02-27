@@ -1,15 +1,15 @@
-Param(
-[string]$applicationId,
-[string][ValidateNotNullOrEmpty()]$secureStringPwd,
-[string]$virtualNetworkResourceGroup,
-[string]$virtualnetworkname,
-[string]$pdc_networkInterfaceIP
-)
+$applicationId = Get-AutomationVariable -Name 'applicationId'
+$tenantId = Get-AutomationVariable -Name 'tenantId'
+$secureStringPwd = Get-AutomationVariable -Name 'secureStringPwd'
+$virtualNetworkResourceGroup = Get-AutomationVariable -Name ''
+$virtualnetworkname = Get-AutomationVariable -Name 'virtualNetworkResourceGroup'
+$pdc_networkInterfaceIP = Get-AutomationVariable -Name 'pdc_networkInterfaceIP'
+
 
 #LOGON TO AZURE
 $secpasswd = ConvertTo-SecureString $secureStringPwd -AsPlainText -Force
 ($creds = New-Object System.Management.Automation.PSCredential ($applicationId, $secpasswd))
-Connect-AzureRmAccount -ServicePrincipal -Credential $credential -TenantId "f91f6220-c049-488e-a0a1-9618ddb7adc5"
+Connect-AzureRmAccount -ServicePrincipal -Credential $credential -TenantId $tenantId
 
 #SET DNS SERVER IP IN AZURE VNET
 $vnet = Get-AzureRmVirtualNetwork -ResourceGroupName $virtualNetworkResourceGroup -name $virtualnetworkname 
