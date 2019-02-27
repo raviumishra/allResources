@@ -5,7 +5,7 @@
         "automationAccount": {
             "type": "string"
         },
-        "AzureRM.Profile_Module_URL": {
+        "AzureRM.profile_Module_URL": {
             "type": "string"
         },
         "AzureRM.Network_Module_URL": {
@@ -16,79 +16,75 @@
         }
     },
     "variables": {
-        "powerShellGalleryModule1":"AzureRm.Profile",
-        "powerShellGalleryModule2":"AzureRm.Network",
-
-        "runbookDescription": "Configures the VNET for DNS server with Primary domain controller IP"
+        "runbookDescription": "Configures the VNET for DNS server with Primary domain controller IP",
+        "sku": "Free"
     },
     "resources": [
         {
             "name": "[parameters('automationAccount')]",
             "type": "Microsoft.Automation/automationAccounts",
             "apiVersion": "2015-10-31",
-            "location": "eastus2",
+            "location": "[resourceGroup().location]",
             "dependsOn": [],
             "tags": {},
             "properties": {
                 "sku": {
-                    "name": "Free"
+                    "name": "[variables('sku')]"
                 }
             },
-            "resources": []
-        },
-        {
-            "name": "[concat(parameters('automationAccount'), '/', 'AzureRM.Profile')]",
-            "type": "Microsoft.Automation/automationAccounts/modules",
-            "apiVersion": "2015-10-31",
-            "location": "eastus2",
-            "properties": {
-                "isGlobal": false,
-                "sizeInBytes": 0,
-                "contentLink": {
-                    "uri": "[concat('https://www.powershellgallery.com/api/v2/package/', variables('powerShellGalleryModule1'))]"
+            "resources": [
+                {
+                    "name": "vnetDNS",
+                    "type": "runbooks",
+                    "apiVersion": "2015-10-31",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
+                    ],
+                    "tags": {},
+                    "properties": {
+                        "runbookType": "Script",
+                        "logProgress": false,
+                        "logVerbose": false,
+                        "description": "[variables('runbookDescription')]",
+                        "publishContentLink": {
+                            "uri": "[parameters('RunbookURL')]",
+                            "version": "1.0.0.0"
+                        }
+                    }
+                },
+                {
+                    "name": "AzureRM.Profile",
+                    "type": "modules",
+                    "apiVersion": "2015-10-31",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
+                    ],
+                    "tags": {},
+                    "properties": {
+                        "contentLink": {
+                            "uri": "[parameters('AzureRM.profile_Module_URL')]"
+                        }
+                    }
+                },
+                {
+                    "name": "AzureRM.Network",
+                    "type": "modules",
+                    "apiVersion": "2015-10-31",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[parameters('automationAccount')]",
+                        "AzureRM.Profile"
+                    ],
+                    "tags": {},
+                    "properties": {
+                        "contentLink": {
+                            "uri": "[parameters('AzureRM.Network_Module_URL')]"
+                        }
+                    }
                 }
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
             ]
-        },
-        {
-            "name": "[concat(parameters('automationAccount'), '/', 'AzureRM.Network')]",
-            "type": "Microsoft.Automation/automationAccounts/modules",
-            "apiVersion": "2015-10-31",
-            "location": "eastus2",
-            "properties": {
-                "isGlobal": false,
-                "sizeInBytes": 0,
-                "contentLink": {
-                    "uri": "[concat('https://www.powershellgallery.com/api/v2/package/', variables('powerShellGalleryModule2'))]"
-                }
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]",
-                "[concat(parameters('automationAccount'), '/', 'AzureRM.Profile')]"
-
-            ]
-        },
-        {
-            "name": "[concat(parameters('automationAccount'), '/', 'runbook')]",
-            "type": "Microsoft.Automation/automationAccounts/runbooks",
-            "apiVersion": "2018-06-30",
-            "location": "eastus2",
-            "dependsOn": [
-                "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
-            ],
-            "tags": {},
-            "properties": {
-                "runbookType": "PowerShell",
-                "logProgress": false,
-                "logVerbose": false,
-                "description": "[variables('runbookDescription')]",
-                "publishContentLink": {
-                    "uri": "[parameters('RunbookURL')]",
-                    "version": "1.0.0.0"
-                }
-            }
         }
     ],
     "outputs": {}
