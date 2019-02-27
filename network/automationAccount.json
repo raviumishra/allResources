@@ -16,7 +16,9 @@
         }
     },
     "variables": {
-        
+        "powerShellGalleryModule1":"AzureRm.Profile",
+        "powerShellGalleryModule2":"AzureRm.Network",
+
         "runbookDescription": "Configures the VNET for DNS server with Primary domain controller IP"
     },
     "resources": [
@@ -43,7 +45,7 @@
                 "isGlobal": false,
                 "sizeInBytes": 0,
                 "contentLink": {
-                    "uri": "[parameters('AzureRM.profile_Module_URL')]"
+                    "uri": "[concat('https://www.powershellgallery.com/api/v2/package/', variables('powerShellGalleryModule1'))]"
                 }
             },
             "dependsOn": [
@@ -59,7 +61,7 @@
                 "isGlobal": false,
                 "sizeInBytes": 0,
                 "contentLink": {
-                    "uri": "[parameters('AzureRM.Network_Module_URL')]"
+                    "uri": "[concat('https://www.powershellgallery.com/api/v2/package/', variables('powerShellGalleryModule2'))]"
                 }
             },
             "dependsOn": [
