@@ -1,8 +1,8 @@
 $applicationId = Get-AutomationVariable -Name 'applicationId'
 $tenantId = Get-AutomationVariable -Name 'tenantId'
-$appsecret = Get-AutomationVariable -Name 'secureStringPwd'
-$virtualNetworkResourceGroup = Get-AutomationVariable -Name ''
-$virtualnetworkname = Get-AutomationVariable -Name 'virtualNetworkResourceGroup'
+$appsecret = Get-AutomationVariable -Name 'appsecret'
+$virtualNetworkResourceGroup = Get-AutomationVariable -Name 'virtualNetworkResourceGroup'
+$virtualnetworkname = Get-AutomationVariable -Name 'virtualnetworkname'
 $pdc_networkInterfaceIP = Get-AutomationVariable -Name 'pdc_networkInterfaceIP'
 
 
