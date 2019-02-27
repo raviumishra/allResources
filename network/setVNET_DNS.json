@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "webhookURL": {
+            "type": "string"
+        },
+        "virtualmachineName": {
+            "type": "string"
+        },
+        "vmCount": {
+            "type": "int"
+        },
+        "webhookTrigger": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('virtualmachineName'),copyindex(1),'/webhook')]",
+            "copy": {
+                "name": "webhookloop",
+                "count": "[parameters('vmCount')]"
+            },
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-06-15",
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.9",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "[parameters('webhookTrigger')]"
+                    ],
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File webhook_trigger.ps1', ' -uri ', parameters('webhookurl'))]"
+                }
+            }
+        }
+    ]
+}
