@@ -29,7 +29,7 @@
         {
             "apiVersion": "2016-03-30",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('virtualmachineName'),copyindex(2),'/CreateADForest')]",
+            "name": "[concat(parameters('virtualmachineName'),copyindex(1),'/CreateADForest')]",
             "location": "[resourceGroup().location]",
             "copy": {
                 "name": "CreateADForestloop",
