@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "accountName": {
+        "automationAccount": {
             "type": "string"
         },
         "AzureRM.profile_Module_URL": {
@@ -16,13 +16,14 @@
         }
     },
     "variables": {
+        
         "runbookDescription": "Configures the VNET for DNS server with Primary domain controller IP"
     },
     "resources": [
         {
-            "name": "[parameters('accountName')]",
+            "name": "[parameters('automationAccount')]",
             "type": "Microsoft.Automation/automationAccounts",
-            "apiVersion": "2018-06-30",
+            "apiVersion": "2015-10-31",
             "location": "eastus2",
             "dependsOn": [],
             "tags": {},
@@ -34,42 +35,44 @@
             "resources": []
         },
         {
-            "name": "[concat(parameters('accountName'), '/', 'AzureRM.profile')]",
-            "type": "Microsoft.Automation/automationAccounts/modules",
-            "apiVersion": "2018-06-30",
+            "name": "AzureRM.Profile",
+            "type": "modules",
+            "apiVersion": "2015-10-31",
             "location": "eastus2",
-            "dependsOn": [
-                "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
-            ],
-            "tags": {},
             "properties": {
+                "isGlobal": false,
+                "sizeInBytes": 0,
                 "contentLink": {
                     "uri": "[parameters('AzureRM.profile_Module_URL')]"
                 }
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccount'))]"
+            ]
         },
         {
-            "name": "[concat(parameters('accountName'), '/', 'AzureRM.network')]",
-            "type": "Microsoft.Automation/automationAccounts/modules",
-            "apiVersion": "2018-06-30",
+            "name": "AzureRM.Network",
+            "type": "modules",
+            "apiVersion": "2015-10-31",
             "location": "eastus2",
-            "dependsOn": [
-                "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
-            ],
-            "tags": {},
             "properties": {
+                "isGlobal": false,
+                "sizeInBytes": 0,
                 "contentLink": {
                     "uri": "[parameters('AzureRM.Network_Module_URL')]"
                 }
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccount'))]"
+            ]
         },
         {
-            "name": "[concat(parameters('accountName'), '/', 'runbook')]",
+            "name": "[concat(parameters('automationAccount'), '/', 'runbook')]",
             "type": "Microsoft.Automation/automationAccounts/runbooks",
             "apiVersion": "2018-06-30",
             "location": "eastus2",
             "dependsOn": [
-                "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
+                "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
             ],
             "tags": {},
             "properties": {
