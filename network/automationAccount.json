@@ -63,7 +63,9 @@
                 }
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccount'))]"
+                "[resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccount'))]",
+                "[concat(parameters('automationAccount'), '/', 'AzureRM.Profile')]"
+
             ]
         },
         {
