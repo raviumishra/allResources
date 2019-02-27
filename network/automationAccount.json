@@ -83,6 +83,23 @@
                             "uri": "[parameters('AzureRM.Network_Module_URL')]"
                         }
                     }
+                },
+                {
+                    "name": "vnetDNS_webhook",
+                    "type": "webhooks",
+                    "apiVersion": "2015-10-31",
+                    "dependsOn": [
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
+                    ],
+                    "properties": {
+                        "isEnabled": true,
+                        "uri": "https://s5events.azure-automation.net/webhooks?token=hMSIbM2LZAEv4ZvHZUG4pCBJalbB9MYkUW6rOgEKLyY%3d",
+                        "expiryTime": "2020-02-26 11:06:07 PM",
+                        "parameters": {},
+                        "runbook": {
+                            "name": "vnetDNS"
+                        }
+                    }
                 }
             ]
         }
