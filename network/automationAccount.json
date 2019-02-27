@@ -1,11 +1,11 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "automationAccount": {
             "type": "string"
         },
-        "AzureRM.profile_Module_URL": {
+        "AzureRM.Profile_Module_URL": {
             "type": "string"
         },
         "AzureRM.Network_Module_URL": {
@@ -35,8 +35,8 @@
             "resources": []
         },
         {
-            "name": "AzureRM.Profile",
-            "type": "modules",
+            "name": "[concat(parameters('automationAccount'), '/', 'AzureRM.Profile')]",
+            "type": "Microsoft.Automation/automationAccounts/modules",
             "apiVersion": "2015-10-31",
             "location": "eastus2",
             "properties": {
@@ -51,8 +51,8 @@
             ]
         },
         {
-            "name": "AzureRM.Network",
-            "type": "modules",
+            "name": "[concat(parameters('automationAccount'), '/', 'AzureRM.Network')]",
+            "type": "Microsoft.Automation/automationAccounts/modules",
             "apiVersion": "2015-10-31",
             "location": "eastus2",
             "properties": {
