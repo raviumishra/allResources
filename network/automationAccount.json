@@ -24,7 +24,7 @@
             "name": "[parameters('automationAccount')]",
             "type": "Microsoft.Automation/automationAccounts",
             "apiVersion": "2015-10-31",
-            "location": "[resourceGroup().location]",
+            "location": "eastus2",
             "dependsOn": [],
             "tags": {},
             "properties": {
@@ -37,7 +37,7 @@
                     "name": "vnetDNS",
                     "type": "runbooks",
                     "apiVersion": "2015-10-31",
-                    "location": "[resourceGroup().location]",
+                    "location": "eastus2",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
                     ],
@@ -57,7 +57,7 @@
                     "name": "AzureRM.Profile",
                     "type": "modules",
                     "apiVersion": "2015-10-31",
-                    "location": "[resourceGroup().location]",
+                    "location": "eastus2",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
                     ],
@@ -72,7 +72,7 @@
                     "name": "AzureRM.Network",
                     "type": "modules",
                     "apiVersion": "2015-10-31",
-                    "location": "[resourceGroup().location]",
+                    "location": "eastus2",
                     "dependsOn": [
                         "[parameters('automationAccount')]",
                         "AzureRM.Profile"
