@@ -43,7 +43,7 @@
                     ],
                     "tags": {},
                     "properties": {
-                        "runbookType": "Script",
+                        "runbookType": "PowerShell",
                         "logProgress": false,
                         "logVerbose": false,
                         "description": "[variables('runbookDescription')]",
