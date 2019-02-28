@@ -21,7 +21,7 @@
             "type": "string"
         },
         "appsecret": {
-            "type": "string"
+            "type": "securestring"
         },
         "virtualNetworkResourceGroup": {
             "type": "string"
@@ -92,7 +92,7 @@
                     "apiVersion": "2015-10-31",
                     "location": "eastus2",
                     "dependsOn": [
-                        "[parameters('automationAccount')]",
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]",
                         "AzureRM.Profile"
                     ],
                     "tags": {},
@@ -108,18 +108,18 @@
                     "apiVersion": "2015-10-31",
                     "location": "eastus2",
                     "dependsOn": [
-                        "[parameters('automationAccount')]"
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
                     ],
                     "properties": {
                         "description": "applicationId",
-                        "value": "[parameters('applicationId')]"
+                        "value": "[concat('\"',parameters('applicationId'),'\"')]"
                     }
                 },
                 {
                     "type": "Microsoft.Automation/automationAccounts/variables",
                     "name": "[concat(parameters('automationAccount'),'/tenantid')]",
                     "apiVersion": "2015-10-31",
-                    "location": "[resourceGroup().location]",
+                    "location": "eastus2",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
                     ],
@@ -132,52 +132,52 @@
                     "type": "Microsoft.Automation/automationAccounts/variables",
                     "name": "[concat(parameters('automationAccount'),'/appsecret')]",
                     "apiVersion": "2015-10-31",
-                    "location": "[resourceGroup().location]",
+                    "location": "eastus2",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
                     ],
                     "properties": {
                         "description": "appsecret",
-                        "value": "[parameters('appsecret')]"
+                        "value": "[concat('\"',parameters('appsecret'),'\"')]"
                     }
                 },
                 {
                     "type": "Microsoft.Automation/automationAccounts/variables",
                     "name": "[concat(parameters('automationAccount'),'/virtualNetworkResourceGroup')]",
                     "apiVersion": "2015-10-31",
-                    "location": "[resourceGroup().location]",
+                    "location": "eastus2",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
                     ],
                     "properties": {
                         "description": "virtualNetworkResourceGroup",
-                        "value": "[parameters('virtualNetworkResourceGroup')]"
+                        "value": "[concat('\"',parameters('virtualNetworkResourceGroup'),'\"')]"
                     }
                 },
                 {
                     "type": "Microsoft.Automation/automationAccounts/variables",
                     "name": "[concat(parameters('automationAccount'),'/virtualnetworkname')]",
                     "apiVersion": "2015-10-31",
-                    "location": "[resourceGroup().location]",
+                    "location": "eastus2",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
                     ],
                     "properties": {
                         "description": "virtualnetworkname",
-                        "value": "[parameters('virtualnetworkname')]"
+                        "value": "[concat('\"',parameters('virtualnetworkname'),'\"')]"
                     }
                 },
                 {
                     "type": "Microsoft.Automation/automationAccounts/variables",
                     "name": "[concat(parameters('automationAccount'),'/pdc_networkInterfaceIP')]",
                     "apiVersion": "2015-10-31",
-                    "location": "[resourceGroup().location]",
+                    "location": "eastus2",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
                     ],
                     "properties": {
                         "description": "pdc_networkInterfaceIP",
-                        "value": "[parameters('pdc_networkInterfaceIP')]"
+                        "value": "[concat('\"',parameters('pdc_networkInterfaceIP'),'\"')]"
                     }
                 },
                 {
