@@ -52,7 +52,7 @@
             },
             "resources": [
                 {
-                    "name": "vnetDNS",
+                    "name": "vnetDNS_runbook",
                     "type": "runbooks",
                     "apiVersion": "2015-10-31",
                     "location": "eastus2",
@@ -185,7 +185,8 @@
                     "type": "webhooks",
                     "apiVersion": "2015-10-31",
                     "dependsOn": [
-                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]"
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccount'))]",
+                        "vnetDNS_runbook"
                     ],
                     "properties": {
                         "isEnabled": true,
