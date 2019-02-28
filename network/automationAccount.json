@@ -194,7 +194,7 @@
                         "expiryTime": "2020-02-26 11:06:07 PM",
                         "parameters": {},
                         "runbook": {
-                            "name": "vnetDNS"
+                            "name": "vnetDNS_runbook"
                         }
                     }
                 }
