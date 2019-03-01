@@ -11,10 +11,10 @@
         "domainName": {
             "type": "string"
         },
-        "DomainUserName": {
+        "DomainAdminUserName": {
             "type": "string"
         },
-        "DomainPassword": {
+        "DomainAdminPassword": {
             "type": "securestring"
         },
         "adPDCModulesURL": {
@@ -47,14 +47,14 @@
                     "Properties": {
                         "DomainName": "[parameters('domainName')]",
                         "AdminCreds": {
-                            "UserName": "[parameters('DomainUserName')]",
+                            "UserName": "[parameters('DomainAdminUserName')]",
                             "Password": "PrivateSettingsRef:AdminPassword"
                         }
                     }
                 },
                 "protectedSettings": {
                     "Items": {
-                        "AdminPassword": "[parameters('DomainPassword')]"
+                        "AdminPassword": "[parameters('DomainAdminPassword')]"
                     }
                 }
             }
