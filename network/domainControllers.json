@@ -115,7 +115,7 @@
                         "properties": {
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "/subscriptions/4f911ca4-870d-4fb6-894b-6814ecd3776d/resourceGroups/GAV-CU-EMS-DR-NET-VN-001/providers/Microsoft.Network/virtualNetworks/gavcu-ems-dr-net-vn-001/subnets/adSubnet"
+                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('vnetResourceGroup'),'/providers/Microsoft.Network/virtualNetworks/',parameters('virtualNetwork'),'/subnets/',parameters('ad_SubnetRef').ad)]"
                             },
                             "privateIPAddress": "[parameters('ad_ILB').IP]"
                         }
