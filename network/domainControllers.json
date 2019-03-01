@@ -19,7 +19,7 @@
             "type": "string"
         },
         "adILB_IP": {
-            "type": "object"
+            "type": "string"
         },
         "virtualmachineName": {
             "type": "string"
