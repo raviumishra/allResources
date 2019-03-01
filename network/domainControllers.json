@@ -57,10 +57,10 @@
         "domainName": {
             "type": "string"
         },
-        "DomainUserName": {
+        "DomainAdminUserName": {
             "type": "string"
         },
-        "DomainPassword": {
+        "DomainAdminPassword": {
             "type": "securestring"
         },
         "omsWorkspaceResourceGroup": {
@@ -162,8 +162,8 @@
                 },
                 "osProfile": {
                     "computerName": "[concat(parameters('virtualmachineName'),copyIndex(1))]",
-                    "adminUsername": "[parameters('DomainUserName')]",
-                    "adminPassword": "[parameters('DomainPassword')]"
+                    "adminUsername": "[parameters('DomainAdminUserName')]",
+                    "adminPassword": "[parameters('DomainAdminPassword')]"
                 },
                 "storageProfile": {
                     "imageReference": {
