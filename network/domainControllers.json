@@ -68,6 +68,15 @@
         },
         "omsWorkspaceName": {
             "type": "string"
+        },
+        "SupportEmail": {
+            "type": "string"
+        },
+        "uai": {
+            "type": "string"
+        },
+        "Environment_Category": {
+            "type": "string"
         }
     },
     "variables": {
@@ -148,6 +157,11 @@
             "name": "[concat(parameters('virtualmachineName'), copyIndex(1))]",
             "apiVersion": "2018-10-01",
             "location": "[resourcegroup().location]",
+            "tags": {
+                "uai": "[parameters('uai')]",
+                "SupportEmail": "[parameters('SupportEmail')]",
+                "env": "[parameters('Environment_Category')]"
+            },
             "copy": {
                 "name": "virtualMachineLoop",
                 "count": "[parameters('ad_vmCount')]"
