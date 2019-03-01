@@ -36,25 +36,25 @@
             "type": "string"
         },
         "emsManagerILB_Name": {
-            "type": "object"
+            "type": "string"
         },
         "emsManagerILB_IP": {
             "type": "object"
         },
         "webapiILB_Name": {
-            "type": "object"
+            "type": "string"
         },
         "webapiILB_IP": {
             "type": "object"
         },
         "sqlILB_Name": {
-            "type": "object"
+            "type": "string"
         },
         "sqlILB_IP": {
             "type": "object"
         },
         "jumpboxILB_Name": {
-            "type": "object"
+            "type": "string"
         },
         "jumpboxILB_IP": {
             "type": "object"
