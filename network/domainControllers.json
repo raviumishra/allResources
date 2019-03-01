@@ -15,7 +15,10 @@
         "ad_vmCount": {
             "type": "int"
         },
-        "ad_ILB": {
+        "adILB_Name": {
+            "type": "object"
+        },
+        "adILB_IP": {
             "type": "object"
         },
         "virtualmachineName": {
@@ -101,7 +104,7 @@
         },
         {
             "apiVersion": "2018-08-01",
-            "name": "[parameters('ad_ILB').Name]",
+            "name": "[parameters('adILB_Name')]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -117,7 +120,7 @@
                             "subnet": {
                                 "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('vnetResourceGroup'),'/providers/Microsoft.Network/virtualNetworks/',parameters('virtualNetwork'),'/subnets/',parameters('ad_SubnetRef').ad)]"
                             },
-                            "privateIPAddress": "[parameters('ad_ILB').IP]"
+                            "privateIPAddress": "[parameters('adILB_IP')]"
                         }
                     }
                 ]
