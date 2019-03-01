@@ -338,7 +338,7 @@
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnet_Names').manager)]"
                             },
-                            "privateIPAddress": "[parameters('emsManagerILB_IP')]"
+                            "privateIPAddress": "[parameters('emsManagerILB_IP').IP]"
                         }
                     }
                 ]
@@ -364,7 +364,7 @@
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnet_Names').webapi)]"
                             },
-                            "privateIPAddress": "[parameters('webapiILB_IP')]"
+                            "privateIPAddress": "[parameters('webapiILB_IP').IP]"
                         }
                     }
                 ]
@@ -390,7 +390,7 @@
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnet_Names').sql)]"
                             },
-                            "privateIPAddress": "[parameters('sqlILB_IP')]"
+                            "privateIPAddress": "[parameters('sqlILB_IP').IP]"
                         }
                     }
                 ]
@@ -416,7 +416,7 @@
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnet_Names').jumpbox)]"
                             },
-                            "privateIPAddress": "[parameters('jumpboxILB_IP')]"
+                            "privateIPAddress": "[parameters('jumpboxILB_IP').IP]"
                         }
                     }
                 ]
