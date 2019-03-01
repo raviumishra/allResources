@@ -16,7 +16,7 @@
             "type": "int"
         },
         "adILB_Name": {
-            "type": "object"
+            "type": "string"
         },
         "adILB_IP": {
             "type": "object"
