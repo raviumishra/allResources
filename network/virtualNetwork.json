@@ -35,16 +35,28 @@
         "cookieBasedAffinity": {
             "type": "string"
         },
-        "emsManagerILB": {
+        "emsManagerILB_Name": {
             "type": "object"
         },
-        "webapiILB": {
+        "emsManagerILB_IP": {
             "type": "object"
         },
-        "sqlILB": {
+        "webapiILB_Name": {
             "type": "object"
         },
-        "jumpboxILB": {
+        "webapiILB_IP": {
+            "type": "object"
+        },
+        "sqlILB_Name": {
+            "type": "object"
+        },
+        "sqlILB_IP": {
+            "type": "object"
+        },
+        "jumpboxILB_Name": {
+            "type": "object"
+        },
+        "jumpboxILB_IP": {
             "type": "object"
         }
     },
@@ -308,7 +320,7 @@
         },
         {
             "apiVersion": "2018-10-01",
-            "name": "[parameters('emsManagerILB').Name]",
+            "name": "[parameters('emsManagerILB_Name')]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -326,7 +338,7 @@
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnet_Names').manager)]"
                             },
-                            "privateIPAddress": "[parameters('emsManagerILB').IP]"
+                            "privateIPAddress": "[parameters('emsManagerILB_IP')]"
                         }
                     }
                 ]
@@ -334,7 +346,7 @@
         },
         {
             "apiVersion": "2018-10-01",
-            "name": "[parameters('webapiILB').Name]",
+            "name": "[parameters('webapiILB_Name')]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -352,7 +364,7 @@
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnet_Names').webapi)]"
                             },
-                            "privateIPAddress": "[parameters('webapiILB').IP]"
+                            "privateIPAddress": "[parameters('webapiILB_IP')]"
                         }
                     }
                 ]
@@ -360,7 +372,7 @@
         },
         {
             "apiVersion": "2018-10-01",
-            "name": "[parameters('sqlILB').Name]",
+            "name": "[parameters('sqlILB_Name')]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -378,7 +390,7 @@
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnet_Names').sql)]"
                             },
-                            "privateIPAddress": "[parameters('sqlILB').IP]"
+                            "privateIPAddress": "[parameters('sqlILB_IP')]"
                         }
                     }
                 ]
@@ -386,7 +398,7 @@
         },
         {
             "apiVersion": "2018-10-01",
-            "name": "[parameters('jumpboxILB').Name]",
+            "name": "[parameters('jumpboxILB_Name')]",
             "type": "Microsoft.Network/loadBalancers",
             "location": "[resourceGroup().location]",
             "sku": {
@@ -404,7 +416,7 @@
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnet_Names').jumpbox)]"
                             },
-                            "privateIPAddress": "[parameters('jumpboxILB').IP]"
+                            "privateIPAddress": "[parameters('jumpboxILB_IP')]"
                         }
                     }
                 ]
