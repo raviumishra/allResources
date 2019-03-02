@@ -9,7 +9,7 @@ $pdc_networkInterfaceIP = Get-AutomationVariable -Name 'pdc_networkInterfaceIP'
 #LOGON TO AZURE
 $secpasswd = ConvertTo-SecureString $appsecret -AsPlainText -Force
 ($creds = New-Object System.Management.Automation.PSCredential ($applicationId, $secpasswd))
-Connect-AzureRmAccount -ServicePrincipal -Credential $credential -TenantId $tenantId
+Connect-AzureRmAccount -ServicePrincipal -Credential $creds -TenantId $tenantId
 
 #SET DNS SERVER IP IN AZURE VNET
 $vnet = Get-AzureRmVirtualNetwork -ResourceGroupName $virtualNetworkResourceGroup -name $virtualnetworkname 
