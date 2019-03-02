@@ -12,7 +12,7 @@
             "type": "object"
         },
         "nsgName": {
-            "type": "object"
+            "type": "string"
         },
         "applicationGatewayName": {
             "type": "string"
