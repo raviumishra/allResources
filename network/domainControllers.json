@@ -83,6 +83,9 @@
         },
         "Environment_Category": {
             "type": "string"
+        },
+        "preserve": {
+            "type": "string"
         }
     },
     "variables": {
@@ -167,7 +170,8 @@
                 "ApplicationName": "[parameters('ApplicationName')]",
                 "uai": "[parameters('uai')]",
                 "SupportEmail": "[parameters('SupportEmail')]",
-                "env": "[parameters('Environment_Category')]"
+                "env": "[parameters('Environment_Category')]",
+                "preserve": "[parameters('preserve')]"
             },
             "copy": {
                 "name": "virtualMachineLoop",
