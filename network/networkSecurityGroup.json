@@ -15,6 +15,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[concat(parameters('nsgName'),copyindex(1))]",
             "copy": {
+                "name": "nsgloop",
                 "count": "[parameters('nsg_count')]"
             },
             "location": "[resourceGroup().location]",
