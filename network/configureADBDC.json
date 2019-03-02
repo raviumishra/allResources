@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmCount": {
+            "type": "int"
+        },
+        "virtualmachineName": {
+            "type": "string"
+        },
+        "domainName": {
+            "type": "string"
+        },
+        "adminUserName": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "adBDCModulesURL": {
+            "type": "string"
+        },
+        "adBDCConfigurationFunction": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2016-03-30",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('virtualmachineName'),copyindex(2),'/ConfigureADBDC')]",
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "configADBDCloop",
+                "count": "[parameters('vmCount')]"
+            },
+            "dependsOn": [],
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.19",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "ModulesUrl": "[parameters('adBDCModulesURL')]",
+                    "ConfigurationFunction": "[parameters('adBDCConfigurationFunction')]",
+                    "Properties": {
+                        "DomainName": "[parameters('domainName')]",
+                        "AdminCreds": {
+                            "UserName": "[parameters('adminUserName')]",
+                            "Password": "PrivateSettingsRef:AdminPassword"
+                        }
+                    }
+                },
+                "protectedSettings": {
+                    "Items": {
+                        "AdminPassword": "[parameters('adminPassword')]"
+                    }
+                }
+            }
+        }
+    ]
+}
