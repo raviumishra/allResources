@@ -72,6 +72,9 @@
         "omsWorkspaceName": {
             "type": "string"
         },
+        "ApplicationName": {
+            "type": "string"
+        },
         "SupportEmail": {
             "type": "string"
         },
@@ -161,6 +164,7 @@
             "apiVersion": "2018-10-01",
             "location": "[resourcegroup().location]",
             "tags": {
+                "ApplicationName": "[parameters('ApplicationName')]",
                 "uai": "[parameters('uai')]",
                 "SupportEmail": "[parameters('SupportEmail')]",
                 "env": "[parameters('Environment_Category')]"
