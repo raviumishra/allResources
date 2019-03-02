@@ -34,7 +34,7 @@
             "type": "string"
         },
         "ad_SubnetRef": {
-            "type": "object"
+            "type": "string"
         },
         "networkInterfaceName": {
             "type": "string"
