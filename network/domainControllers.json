@@ -85,7 +85,7 @@
             "type": "string"
         },
         "preserve": {
-            "type": "string"
+            "type": "bool"
         }
     },
     "variables": {
