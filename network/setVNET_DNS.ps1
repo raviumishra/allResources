@@ -18,4 +18,6 @@ $secpasswd = ConvertTo-SecureString $appsecret -AsPlainText -Force
 ($creds = New-Object System.Management.Automation.PSCredential ($applicationId, $secpasswd))
 Connect-AzureRmAccount -ServicePrincipal -Credential $creds -TenantId $tenantId
 
-Start-AzureRmAutomationRunbook -Name vnetDNS_runbook -ResourceGroupName $automationAccountResourceGroup  -AutomationAccountName $automationAccount 
+Start-AzureRmAutomationRunbook -Name vnetDNS_runbook -ResourceGroupName $automationAccountResourceGroup  -AutomationAccountName $automationAccount
+Start-Sleep 30
+shutdown /r
