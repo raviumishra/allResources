@@ -1,4 +1,4 @@
-Install-Module -Name AzureRM.Automation
+Install-Module -Name AzureRM.Automation -Confirm:$False
 $appsecret = 'rkULdSvegHmypJv0hc6HDLy4hhAn3XgU+qQCvGukPM4='
 $applicationId = '272de8a0-d263-4a98-a79f-ca58dcdef45c'
 $tenantId = 'e525031f-bb1f-4659-aa0e-c0f3fbfa832f'
