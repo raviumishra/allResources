@@ -16,7 +16,7 @@
     "resources": [
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('virtualmachineName'),copyindex(1),'/webhook')]",
+            "name": "[concat(parameters('virtualmachineName'),copyindex(2),'/webhook')]",
             "copy": {
                 "name": "webhookloop",
                 "count": "[parameters('vmCount')]"
