@@ -32,7 +32,7 @@
                     "fileUris": [
                         "[parameters('CustomScriptExtensionScriptFilePath')]"
                     ],
-                    "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File setVNET_DNS.ps1"
+                    "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File vnetDNS_Trigger.ps1"
                 }
             }
         }
