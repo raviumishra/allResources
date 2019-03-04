@@ -1,10 +1,10 @@
 Param (
 [Parameter()]
-[String]$appsecret = 'rkULdSvegHmypJv0hc6HDLy4hhAn3XgU+qQCvGukPM4=',
-[String]$applicationId = '272de8a0-d263-4a98-a79f-ca58dcdef45c',
-[String]$tenantId = 'e525031f-bb1f-4659-aa0e-c0f3fbfa832f',
-[String]$automationAccountResourceGroup = 'GAV-EMS-DEV-TEN-SCU-02',
-[String]$automationAccount = 'GAV-EMS-DEV-TEN-SCU-04'
+[String]$appsecret,
+[String]$applicationId,
+[String]$tenantId,
+[String]$automationAccountResourceGroup,
+[String]$automationAccount
 )
 #DISABLE WINDOWS DEFENDER
 Set-MpPreference -DisableRealtimeMonitoring $true
@@ -19,5 +19,5 @@ $secpasswd = ConvertTo-SecureString $appsecret -AsPlainText -Force
 Connect-AzureRmAccount -ServicePrincipal -Credential $creds -TenantId $tenantId
 
 Start-AzureRmAutomationRunbook -Name vnetDNS_runbook -ResourceGroupName $automationAccountResourceGroup  -AutomationAccountName $automationAccount
-Start-Sleep 120
+Start-Sleep 10
 Restart-Computer -Force
