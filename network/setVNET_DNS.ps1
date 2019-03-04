@@ -19,5 +19,5 @@ $secpasswd = ConvertTo-SecureString $appsecret -AsPlainText -Force
 Connect-AzureRmAccount -ServicePrincipal -Credential $creds -TenantId $tenantId
 
 Start-AzureRmAutomationRunbook -Name vnetDNS_runbook -ResourceGroupName $automationAccountResourceGroup  -AutomationAccountName $automationAccount
-Start-Sleep 30
+Start-Sleep 60
 shutdown /r
