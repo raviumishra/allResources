@@ -32,10 +32,10 @@
         "domainName": {
             "type": "string"
         },
-        "DomainUserName": {
+        "DomainAdminUserName": {
             "type": "string"
         },
-        "DomainPassword": {
+        "DomainAdminPassword": {
             "type": "securestring"
         },
         "omsWorkspaceResourceGroup": {
@@ -120,12 +120,12 @@
                         "settings": {
                             "Name": "[parameters('domainName')]",
                             "OUPath": "",
-                            "User": "[concat(parameters('domainName'), '\\', parameters('DomainUserName'))]",
+                            "User": "[concat(parameters('domainName'), '\\', parameters('DomainAdminUserName'))]",
                             "Restart": "true",
                             "Options": "3"
                         },
                         "protectedSettings": {
-                            "Password": "[parameters('DomainPassword')]"
+                            "Password": "[parameters('DomainAdminPassword')]"
                         }
                     }
                 },
