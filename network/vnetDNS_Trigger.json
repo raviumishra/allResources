@@ -50,9 +50,7 @@
                     "fileUris": [
                         "[parameters('CustomScriptExtensionScriptFilePath')]"
                     ],
-                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File  ',parameters('CustomScriptFileName'),'  -appsecret ',parameters('appsecret'),'  -applicationId ',parameters('applicationId'),'  -tenantId ',parameters('tenantId'),'  -automationAccountResourceGroup ',parameters('automationAccountResourceGroup'),'  -automationAccount ',parameters('automationAccount'))]",
-                                        "[concat('powershell -ExecutionPolicy Unrestricted -File  ',parameters('CustomScriptFileName'),'  -SAName ',parameters('StorageAccountName'),'  -SAKey ', listKeys(resourceId(resourceGroup().name,'Microsoft.Storage/storageAccounts',parameters('StorageAccountName')),'2015-06-15').key1,'  -AzureFileShareName ',parameters('AzureFileShareName'))]"
-                
+                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File  ',parameters('CustomScriptFileName'),'  -appsecret ',parameters('appsecret'),'  -applicationId ',parameters('applicationId'),'  -tenantId ',parameters('tenantId'),'  -automationAccountResourceGroup ',parameters('automationAccountResourceGroup'),'  -automationAccount ',parameters('automationAccount'))]"
                 }
             }
         }
