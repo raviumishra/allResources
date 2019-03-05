@@ -8,7 +8,22 @@
         "vmCount": {
             "type": "int"
         },
+        "CustomScriptFileName": {
+            "type": "string"
+        },
         "CustomScriptExtensionScriptFilePath": {
+            "type": "string"
+        },
+        "appsecret": {
+            "type": "string"
+        },
+        "applicationId": {
+            "type": "string"
+        },
+        "automationAccountResourceGroup": {
+            "type": "string"
+        },
+        "automationAccount": {
             "type": "string"
         }
     },
@@ -32,7 +47,7 @@
                     "fileUris": [
                         "[parameters('CustomScriptExtensionScriptFilePath')]"
                     ],
-                    "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File vnetDNS_Trigger.ps1"
+                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File',parameters('CustomScriptFileName'),'-appsecret',parameters('appsecret'),'-applicationId',parameters('applicationId'),'-tenantId',subscription().subscriptionId,'-automationAccountResourceGroup',parameters('automationAccountResourceGroup'),'-automationAccount',parameters('automationAccount'))]"
                 }
             }
         }
