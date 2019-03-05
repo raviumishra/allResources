@@ -14,6 +14,12 @@
         "sql_SubnetRef": {
             "type": "string"
         },
+        "vnetResourceGroup": {
+            "type": "string"
+        },
+        "virtualNetwork": {
+            "type": "string"
+        },
         "networkInterfaceName": {
             "type": "string"
         },
@@ -72,7 +78,7 @@
                             "privateIpAddressVersion": "IPv4",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[parameters('sql_SubnetRef')]"
+                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('vnetResourceGroup'),'/providers/Microsoft.Network/virtualNetworks/',parameters('virtualNetwork'),'/subnets/',parameters('sql_SubnetRef'))]"
                             }
                         }
                     }
