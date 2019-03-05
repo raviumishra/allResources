@@ -5,7 +5,13 @@
         "numberofSQLVM": {
             "type": "int"
         },
+        "sql_virtualMachineIP": {
+            "type": "array"
+        },
         "virtualmachineName": {
+            "type": "string"
+        },
+        "sql_SubnetRef": {
             "type": "string"
         },
         "networkInterfaceName": {
@@ -48,6 +54,32 @@
     "variables": {},
     "resources": [
         {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(parameters('networkinterfaceName'), copyIndex(1))]",
+            "apiVersion": "2018-05-01",
+            "location": "[resourcegroup().location]",
+            "copy": {
+                "name": "nicLoop",
+                "count": "[parameters('numberofSQLVM')]"
+            },
+            "dependsOn": [],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIpAddress": "[concat(parameters('sql_virtualMachineIP')[copyindex()])]",
+                            "privateIpAddressVersion": "IPv4",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[parameters('sql_SubnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[concat(parameters('virtualmachineName'), copyIndex(1))]",
             "apiVersion": "2018-10-01",
@@ -56,7 +88,9 @@
                 "name": "virtualMachineLoop",
                 "count": "[parameters('numberofSQLVM')]"
             },
-            "dependsOn": [],
+            "dependsOn": [
+                "nicLoop"
+            ],
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "[parameters('virtualMachineSize')]"
@@ -98,7 +132,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "/subscriptions/4f911ca4-870d-4fb6-894b-6814ecd3776d/resourceGroups/GAV-CU-EMS-DR-NET-VN-001/providers/Microsoft.Network/networkInterfaces/gavcu-ems-dr-web-nic-001"
+                            "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourcegroup().name,'/providers/Microsoft.Network/networkInterfaces/',concat(parameters('networkinterfaceName'), copyIndex(1)))]"
                         }
                     ]
                 }
