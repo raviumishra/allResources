@@ -63,8 +63,8 @@
                 },
                 "osProfile": {
                     "computerName": "[concat(parameters('virtualmachineName'),copyIndex(1))]",
-                    "adminUsername": "[parameters('DomainUserName')]",
-                    "adminPassword": "[parameters('DomainPassword')]"
+                    "adminUsername": "[parameters('DomainAdminUserName')]",
+                    "adminPassword": "[parameters('DomainAdminPassword')]"
                 },
                 "storageProfile": {
                     "imageReference": {
