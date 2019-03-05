@@ -29,12 +29,6 @@
         "dataDiskName": {
             "type": "string"
         },
-        "adminUsername": {
-            "type": "string"
-        },
-        "adminPassword": {
-            "type": "securestring"
-        },
         "domainName": {
             "type": "string"
         },
@@ -69,8 +63,8 @@
                 },
                 "osProfile": {
                     "computerName": "[concat(parameters('virtualmachineName'),copyIndex(1))]",
-                    "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]"
+                    "adminUsername": "[parameters('DomainUserName')]",
+                    "adminPassword": "[parameters('DomainPassword')]"
                 },
                 "storageProfile": {
                     "imageReference": {
