@@ -20,6 +20,9 @@
         "applicationId": {
             "type": "string"
         },
+        "tenantId": {
+            "type": "string"
+        },
         "automationAccountResourceGroup": {
             "type": "string"
         },
@@ -47,7 +50,7 @@
                     "fileUris": [
                         "[parameters('CustomScriptExtensionScriptFilePath')]"
                     ],
-                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File',parameters('CustomScriptFileName'),'-appsecret',parameters('appsecret'),'-applicationId',parameters('applicationId'),'-tenantId',subscription().subscriptionId,'-automationAccountResourceGroup',parameters('automationAccountResourceGroup'),'-automationAccount',parameters('automationAccount'))]"
+                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File',parameters('CustomScriptFileName'),'-appsecret',parameters('appsecret'),'-applicationId',parameters('applicationId'),'-tenantId',parameters('tenantId'),'-automationAccountResourceGroup',parameters('automationAccountResourceGroup'),'-automationAccount',parameters('automationAccount'))]"
                 }
             }
         }
