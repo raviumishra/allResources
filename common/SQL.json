@@ -146,11 +146,30 @@
             "resources": [
                 {
                     "type": "extensions",
-                    "name": "domainJoin",
+                    "name": "reboot",
                     "location": "[resourceGroup().location]",
                     "apiVersion": "2015-06-15",
                     "dependson": [
                         "[concat(parameters('virtualmachineName'), copyIndex(3))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "CustomScriptExtension",
+                        "typeHandlerVersion": "1.9",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted Restart-Computer -Force"
+                        }
+                    }
+                },
+                {
+                    "type": "extensions",
+                    "name": "domainJoin",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2015-06-15",
+                    "dependson": [
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]",
+                        "reboot"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Compute",
