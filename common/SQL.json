@@ -78,7 +78,7 @@
                             "privateIpAddressVersion": "IPv4",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "/subscriptions/d3e59125-7c9b-45e1-a965-97cee1519f92/resourceGroups/GAV-EMS-DEV-TEN-SCU-01/providers/Microsoft.Network/virtualNetworks/GAV-EMS-DEV-TEN-SCU-02/subnets/sql"
+                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('vnetResourceGroup'),'/providers/Microsoft.Network/virtualNetworks/',parameters('virtualNetwork'),'/subnets/',parameters('sql_SubnetRef'))]"
                             }
                         }
                     }
@@ -102,7 +102,7 @@
                     "vmSize": "[parameters('virtualMachineSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[concat(parameters('virtualmachineName'),copyIndex(1))]",
+                    "computerName": "[concat(parameters('virtualmachineName'),copyIndex(3))]",
                     "adminUsername": "[parameters('DomainAdminUserName')]",
                     "adminPassword": "[parameters('DomainAdminPassword')]"
                 },
@@ -150,7 +150,7 @@
                     "location": "[resourceGroup().location]",
                     "apiVersion": "2015-06-15",
                     "dependson": [
-                        "[concat(parameters('virtualmachineName'), copyIndex(1))]"
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Compute",
@@ -175,7 +175,7 @@
                     "apiVersion": "2015-06-15",
                     "location": "[resourcegroup().location]",
                     "dependson": [
-                        "[concat(parameters('virtualmachineName'), copyIndex(1))]"
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
