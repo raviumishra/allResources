@@ -78,7 +78,7 @@
                             "privateIpAddressVersion": "IPv4",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('vnetResourceGroup'),'/providers/Microsoft.Network/virtualNetworks/',parameters('virtualNetwork'),'/subnets/',parameters('sql_SubnetRef'))]"
+                                "id": "/subscriptions/d3e59125-7c9b-45e1-a965-97cee1519f92/resourceGroups/GAV-EMS-DEV-TEN-SCU-01/providers/Microsoft.Network/virtualNetworks/GAV-EMS-DEV-TEN-SCU-02/subnets/sql"
                             }
                         }
                     }
@@ -87,7 +87,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[concat(parameters('virtualmachineName'), copyIndex(1))]",
+            "name": "[concat(parameters('virtualmachineName'), copyIndex(3))]",
             "apiVersion": "2018-10-01",
             "location": "[resourcegroup().location]",
             "copy": {
