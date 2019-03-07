@@ -285,4 +285,7 @@ ELSE
     {
         Write-Warning -Message 'Mapped volumes do not match.  Please ensure the volumes E, L and S are mapped properly.'
     }
+
+#Add Failover cluster feature
+Install-windowsfeature RSAT-Clustering -IncludeAllSubFeature
 Restart-Computer -Force
