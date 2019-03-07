@@ -11,7 +11,7 @@
         "CustomScriptFileName": {
             "type": "string"
         },
-        "CustomScriptExtensionScriptFilePath": {
+        "vnetDNSTrigger_ScriptFilePath": {
             "type": "string"
         },
         "appsecret": {
@@ -48,7 +48,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "[parameters('CustomScriptExtensionScriptFilePath')]"
+                        "[parameters('vnetDNSTrigger_ScriptFilePath')]"
                     ],
                     "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File ',parameters('CustomScriptFileName'), ' -appsecret ', parameters('appsecret'), ' -applicationId ', parameters('applicationId'), ' -tenantId ', parameters('tenantId'), ' -automationAccountResourceGroup ', parameters('automationAccountResourceGroup'), ' -automationAccount ', parameters('automationAccount'))]"
                 }
