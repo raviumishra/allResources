@@ -8,6 +8,9 @@
         "sql_virtualMachineIP": {
             "type": "array"
         },
+        "clusterIpAddress": {
+            "type": "string"
+        },
         "virtualmachineName": {
             "type": "string"
         },
@@ -234,7 +237,10 @@
                     "name": "configuresql",
                     "apiVersion": "2016-03-30",
                     "dependsOn": [
-                        "[concat(parameters('virtualmachineName'), copyIndex(3))]"
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]",
+                        "reboot",
+                        "domainJoin",
+                        "[parameters('StorageAccountName')]"
                     ],
                     "location": "[resourcegroup().location]",
                     "properties": {
@@ -250,7 +256,12 @@
                                 "adminCreds": {
                                     "userName": "[parameters('DomainAdminUserName')]",
                                     "password": "privateSettingsRef:adminPassword"
-                                }
+                                },
+                                "ClusterName": "SQLClusterAG",
+                                "ClusterOwnerNode": "[concat(parameters('virtualmachinename'), '0')]",
+                                "ClusterIP": "[parameters('clusterIpAddress')]",
+                                "witnessStorageBlobEndpoint": "[reference(concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob]",
+                                "witnessStorageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
                             }
                         },
                         "protectedSettings": {
