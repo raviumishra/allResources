@@ -64,9 +64,6 @@
         },
         "SQLPrepareFunction": {
             "type": "string"
-        },
-        "artifacts_baseUri": {
-            "type": "string"
         }
     },
     "variables": {},
