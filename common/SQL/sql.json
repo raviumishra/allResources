@@ -243,6 +243,10 @@
             "type": "Microsoft.Resources/deployments",
             "name": "configureSQL",
             "apiVersion": "2018-05-01",
+            "copy": {
+                "name": "configureSQLLoop",
+                "count": "[parameters('numberofSQLVM')]"
+            },
             "dependsOn": [
                 "[concat(parameters('virtualmachineName'), copyIndex(3))]",
                 "[parameters('StorageAccountName')]"
