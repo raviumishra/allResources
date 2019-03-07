@@ -48,10 +48,13 @@
         "DataDiskSize": {
             "type": "int"
         },
-        "adminUsername": {
+        "domainName": {
             "type": "string"
         },
-        "adminPassword": {
+        "DomainAdminUserName": {
+            "type": "string"
+        },
+        "DomainAdminPassword": {
             "type": "securestring"
         },
         "omsWorkspaceResourceGroup": {
@@ -66,7 +69,7 @@
         "AzureFileShareName": {
             "type": "string"
         },
-        "CustomScriptExtensionScriptFilePath": {
+        "ems_customScriptFilePath": {
             "type": "string"
         },
         "CustomScriptFileName": {
@@ -138,8 +141,8 @@
                 },
                 "osProfile": {
                     "computerName": "[concat(parameters('virtualmachineName'),copyIndex(1))]",
-                    "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]"
+                    "adminUsername": "[parameters('DomainAdminUserName')]",
+                    "adminPassword": "[parameters('DomainAdminPassword')]"
                 },
                 "storageProfile": {
                     "imageReference": {
@@ -181,6 +184,31 @@
             "resources": [
                 {
                     "type": "extensions",
+                    "name": "domainJoin",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2015-06-15",
+                    "dependson": [
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "JsonADDomainExtension",
+                        "typeHandlerVersion": "1.3",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "Name": "[parameters('domainName')]",
+                            "OUPath": "",
+                            "User": "[concat(parameters('domainName'), '\\', parameters('DomainAdminUserName'))]",
+                            "Restart": "true",
+                            "Options": "3"
+                        },
+                        "protectedSettings": {
+                            "Password": "[parameters('DomainAdminPassword')]"
+                        }
+                    }
+                },
+                {
+                    "type": "extensions",
                     "name": "Microsoft.EnterpriseCloud.Monitoring",
                     "apiVersion": "2015-06-15",
                     "location": "[resourcegroup().location]",
@@ -215,7 +243,7 @@
                         "autoUpgradeMinorVersion": true,
                         "settings": {
                             "fileUris": [
-                                "[parameters('CustomScriptExtensionScriptFilePath')]"
+                                "[parameters('ems_customScriptFilePath')]"
                             ]
                         },
                         "protectedSettings": {
