@@ -8,9 +8,6 @@
         "sql_virtualMachineIP": {
             "type": "array"
         },
-        "sql_clusterIpAddress": {
-            "type": "string"
-        },
         "virtualmachineName": {
             "type": "string"
         },
@@ -60,15 +57,6 @@
             "type": "string"
         },
         "omsWorkspaceName": {
-            "type": "string"
-        },
-        "SQLPrepareModuleURL": {
-            "type": "string"
-        },
-        "SQLPrepareFunction": {
-            "type": "string"
-        },
-        "artifacts_baseUri": {
             "type": "string"
         }
     },
