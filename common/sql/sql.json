@@ -193,8 +193,7 @@
                     "apiVersion": "2015-06-15",
                     "location": "[resourcegroup().location]",
                     "dependson": [
-                        "[concat(parameters('virtualmachineName'), copyIndex(3))]",
-                        
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
