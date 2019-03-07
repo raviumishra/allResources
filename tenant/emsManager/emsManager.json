@@ -97,6 +97,17 @@
             }
         },
         {
+            "name": "[parameters('StorageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "location": "[resourcegroup().location]",
+            "apiVersion": "2018-07-01",
+            "properties": {},
+            "sku": {
+                "name": "[parameters('StorageAccountType')]"
+            },
+            "tags": {}
+        },
+        {
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[concat(parameters('networkInterfaceName'), copyindex(1))]",
             "apiVersion": "2018-05-01",
@@ -132,7 +143,8 @@
                 "count": "[parameters('vmCount')]"
             },
             "dependsOn": [
-                "nicLoop"
+                "nicLoop",
+                "[parameters('StorageAccountName')]"
             ],
             "properties": {
                 "availabilitySet": "[if(equals(parameters('AvailabilitySet'), 'Yes'), variables('availabilitySetId'), json('null'))]",
