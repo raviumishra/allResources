@@ -8,33 +8,14 @@ configuration SQLServerPrepareDsc
 		[String]$DomainNetbiosName=(Get-NetBIOSName -DomainName $DomainName),
 
         [Parameter(Mandatory)]
-        [System.Management.Automation.PSCredential]$Admincreds,
-
-        [Parameter(Mandatory=$true)]
-        [String]$ClusterName,
-
-        [Parameter(Mandatory=$true)]
-        [String]$ClusterOwnerNode,
-
-        [Parameter(Mandatory=$true)]
-        [String]$ClusterIP,
-
-       
-
+        [System.Management.Automation.PSCredential]$Admincreds
 
         [Int]$RetryCount=20,
         [Int]$RetryIntervalSec=30
     )
 
-    Import-DscResource -ModuleName xComputerManagement, xNetworking, xActiveDirectory, xStorage, xFailoverCluster, SqlServer, SqlServerDsc
+    Import-DscResource -ModuleName xComputerManagement, xNetworking, xActiveDirectory, xStorage, SqlServer, SqlServerDsc
     [System.Management.Automation.PSCredential]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainNetbiosName}\$($Admincreds.UserName)", $Admincreds.Password)
-
-    $ipcomponents = $ClusterIP.Split('.')
-    $ipcomponents[3] = [convert]::ToString(([convert]::ToInt32($ipcomponents[3])) + 1)
-    $ipdummy = $ipcomponents -join "."
-    $ClusterNameDummy = "c" + $ClusterName
-
-  
 
     $computerName = $env:COMPUTERNAME
     $domainUserName = $DomainCreds.UserName.ToString()
@@ -199,172 +180,6 @@ configuration SQLServerPrepareDsc
             DependsOn = "[SqlServiceAccount]SetServiceAcccount_User"
             PsDscRunAsCredential = $DomainCreds
         }
-
-
-        if ($ClusterOwnerNode -eq $env:COMPUTERNAME) { #This is the primary
-            xCluster CreateCluster
-            {
-                Name                          = $ClusterNameDummy
-                StaticIPAddress               = $ipdummy
-                DomainAdministratorCredential = $DomainCreds
-                DependsOn                     = "[WindowsFeature]FCPSCMD","[Script]ResetSpns"
-            }
-
-           
-
-            SqlAlwaysOnService EnableAlwaysOn
-            {
-                Ensure               = 'Present'
-                ServerName           = $env:COMPUTERNAME
-                InstanceName         = 'MSSQLSERVER'
-                RestartTimeout       = 120
-                DependsOn = "[xCluster]CreateCluster"
-            }
-
-            # Create a DatabaseMirroring endpoint
-            SqlServerEndpoint HADREndpoint
-            {
-                EndPointName         = 'HADR'
-                Ensure               = 'Present'
-                Port                 = 5022
-                ServerName           = $env:COMPUTERNAME
-                InstanceName         = 'MSSQLSERVER'
-                DependsOn            = "[SqlAlwaysOnService]EnableAlwaysOn"
-            }
-
-            # Create the availability group on the instance tagged as the primary replica
-            SqlAG CreateAG
-            {
-                Ensure               = "Present"
-                Name                 = $ClusterName
-                ServerName           = $env:COMPUTERNAME
-                InstanceName         = 'MSSQLSERVER'
-                DependsOn            = "[SqlServerEndpoint]HADREndpoint","[SqlServerRole]AddDomainAdminAccountToSysAdmin"
-                AvailabilityMode     = "SynchronousCommit"
-                FailoverMode         = "Automatic" 
-            }
-
-            SqlAGListener AvailabilityGroupListener
-            {
-                Ensure               = 'Present'
-                ServerName           = $ClusterOwnerNode
-                InstanceName         = 'MSSQLSERVER'
-                AvailabilityGroup    = $ClusterName
-                Name                 = $ClusterName
-                IpAddress            = "$ClusterIP/255.255.255.0"
-                Port                 = 1433
-                PsDscRunAsCredential = $DomainCreds
-                DependsOn            = "[SqlAG]CreateAG"
-            }
-
-            Script SetProbePort
-            {
-
-                GetScript = { 
-                    return @{ 'Result' = $true }
-                }
-                SetScript = {
-                    $ipResourceName = $using:ClusterName + "_" + $using:ClusterIP
-                    $ipResource = Get-ClusterResource $ipResourceName
-                    $clusterResource = Get-ClusterResource -Name $using:ClusterName 
-
-                    Set-ClusterParameter -InputObject $ipResource -Name ProbePort -Value 59999
-
-                    Stop-ClusterResource $ipResource
-                    Stop-ClusterResource $clusterResource
-
-                    Start-ClusterResource $clusterResource #This should be enough
-                    Start-ClusterResource $ipResource #To be on the safe side
-
-                }
-                TestScript = {
-                    $ipResourceName = $using:ClusterName + "_" + $using:ClusterIP
-                    $resource = Get-ClusterResource $ipResourceName
-                    $probePort = $(Get-ClusterParameter -InputObject $resource -Name ProbePort).Value
-                    Write-Verbose "ProbePort = $probePort"
-                    ($(Get-ClusterParameter -InputObject $resource -Name ProbePort).Value -eq 59999)
-                }
-                DependsOn = "[SqlAGListener]AvailabilityGroupListener"
-                PsDscRunAsCredential = $DomainCreds
-            }
-
-        } else {
-            xWaitForCluster WaitForCluster
-            {
-                Name             = $ClusterNameDummy
-                RetryIntervalSec = 10
-                RetryCount       = 60
-                DependsOn        = "[WindowsFeature]FCPSCMD","[Script]ResetSpns"
-            }
-
-            #We have to do this manually due to a problem with xCluster:
-            #  see: https://github.com/PowerShell/xFailOverCluster/issues/7
-            #      - Cluster is added with an IP and the xCluster module tries to access this IP. 
-            #      - Cluster is not not yet responding on that addreess
-            Script JoinExistingCluster
-            {
-                GetScript = { 
-                    return @{ 'Result' = $true }
-                }
-                SetScript = {
-                    $targetNodeName = $env:COMPUTERNAME
-                    Add-ClusterNode -Name $targetNodeName -Cluster $using:ClusterOwnerNode
-                }
-                TestScript = {
-                    $targetNodeName = $env:COMPUTERNAME
-                    $(Get-ClusterNode -Cluster $using:ClusterOwnerNode).Name -contains $targetNodeName
-                }
-                DependsOn = "[xWaitForCluster]WaitForCluster"
-                PsDscRunAsCredential = $DomainCreds
-            }
-
-            SqlAlwaysOnService EnableAlwaysOn
-            {
-                Ensure               = 'Present'
-                ServerName           = $env:COMPUTERNAME
-                InstanceName         = 'MSSQLSERVER'
-                RestartTimeout       = 120
-                DependsOn = "[Script]JoinExistingCluster"
-            }
-
-              # Create a DatabaseMirroring endpoint
-              SqlServerEndpoint HADREndpoint
-              {
-                  EndPointName         = 'HADR'
-                  Ensure               = 'Present'
-                  Port                 = 5022
-                  ServerName           = $env:COMPUTERNAME
-                  InstanceName         = 'MSSQLSERVER'
-                  DependsOn            = "[SqlAlwaysOnService]EnableAlwaysOn"
-              }
-    
-
-              SqlWaitForAG WaitForAG
-              {
-                  Name                 = $ClusterName
-                  RetryIntervalSec     = 20
-                  RetryCount           = 30
-                  PsDscRunAsCredential = $DomainCreds
-                  DependsOn                  = "[SqlServerEndpoint]HADREndpoint","[SqlServerRole]AddDomainAdminAccountToSysAdmin"
-              }
-      
-                # Add the availability group replica to the availability group
-                SqlAGReplica AddReplica
-                {
-                    Ensure                     = 'Present'
-                    Name                       = $env:COMPUTERNAME
-                    AvailabilityGroupName      = $ClusterName
-                    ServerName                 = $env:COMPUTERNAME
-                    InstanceName               = 'MSSQLSERVER'
-                    PrimaryReplicaServerName   = $ClusterOwnerNode
-                    PrimaryReplicaInstanceName = 'MSSQLSERVER'
-                    PsDscRunAsCredential = $DomainCreds
-                    AvailabilityMode     = "SynchronousCommit"
-                    FailoverMode         = "Automatic"
-                    DependsOn            = "[SqlWaitForAG]WaitForAG"     
-                }
-        }
-
 
         LocalConfigurationManager 
         {
