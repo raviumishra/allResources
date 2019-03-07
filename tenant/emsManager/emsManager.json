@@ -21,13 +21,13 @@
         "nicCount": {
             "type": "int"
         },
-        "privateIpAddress": {
+        "ems_ManagerIP": {
             "type": "array"
         },
-        "virtualMachineSize": {
+        "ems_virtualMachineSize": {
             "type": "string"
         },
-        "Subnet1Ref": {
+        "ems_subnetRef": {
             "type": "string"
         },
         "networkInterfaceName": {
@@ -111,11 +111,11 @@
                     {
                         "name": "ipconfig1",
                         "properties": {
-                            "privateIpAddress": "[parameters('privateIpAddress')[copyIndex()]]",
+                            "privateIpAddress": "[parameters('ems_ManagerIP')[copyIndex()]]",
                             "privateIpAddressVersion": "IPv4",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[parameters('Subnet1Ref')]"
+                                "id": "[parameters('ems_subnetRef')]"
                             }
                         }
                     }
@@ -137,7 +137,7 @@
             "properties": {
                 "availabilitySet": "[if(equals(parameters('AvailabilitySet'), 'Yes'), variables('availabilitySetId'), json('null'))]",
                 "hardwareProfile": {
-                    "vmSize": "[parameters('virtualMachineSize')]"
+                    "vmSize": "[parameters('ems_virtualMachineSize')]"
                 },
                 "osProfile": {
                     "computerName": "[concat(parameters('virtualmachineName'),copyIndex(1))]",
