@@ -58,6 +58,9 @@
         },
         "omsWorkspaceName": {
             "type": "string"
+        },
+        "sqlCustom_ScriptFilePath": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -220,6 +223,45 @@
                         },
                         "protectedSettings": {
                             "workspaceKey": "[listKeys(resourceId(parameters('omsWorkspaceResourceGroup'),'Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')), '2015-03-20').primarySharedKey]"
+                        }
+                    }
+                },
+                {
+                    "type": "extensions",
+                    "name": "FailoverCluster",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2015-06-15",
+                    "dependson": [
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "CustomScriptExtension",
+                        "typeHandlerVersion": "1.9",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted install-windowsfeature RSAT-Clustering -IncludeAllSubFeature"
+                        }
+                    }
+                },
+                {
+                    "type": "extensions",
+                    "name": "customscripts",
+                    "apiVersion": "2015-06-15",
+                    "location": "[resourcegroup().location]",
+                    "dependson": [
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "CustomScriptExtension",
+                        "typeHandlerVersion": "1.9",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": [
+                                "[parameters('sqlCustom_ScriptFilePath')]"
+                            ],
+                            "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File customScripts.ps1"
                         }
                     }
                 }
