@@ -72,9 +72,7 @@
             "type": "string"
         }
     },
-    "variables": {
-        "configureSQLTemplate": "[concat(parameters('artifacts_baseUri'), '/SQLv1/DSC/configuresql.json')]"
-    },
+    "variables": {},
     "resources": [
         {
             "name": "[parameters('StorageAccountName')]",
@@ -238,55 +236,6 @@
                     }
                 }
             ]
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "name": "configureSQL",
-            "apiVersion": "2018-05-01",
-            "copy": {
-                "name": "configureSQLLoop",
-                "count": "[parameters('numberofSQLVM')]"
-            },
-            "dependsOn": [
-                "[concat(parameters('virtualmachineName'), copyIndex(3))]",
-                "[parameters('StorageAccountName')]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('configureSQLTemplate')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vmcount": {
-                        "value": "[parameters('numberofSQLVM')]"
-                    },
-                    "virtualmachinename": {
-                        "value": "[parameters('virtualmachineName')]"
-                    },
-                    "clusterIpAddress": {
-                        "value": "[parameters('sql_clusterIpAddress')]"
-                    },
-                    "StorageAccountName": {
-                        "value": "[parameters('StorageAccountName')]"
-                    },
-                    "StorageAccountType": {
-                        "value": "[parameters('StorageAccountType')]"
-                    },
-                    "domainName": {
-                        "value": "[parameters('domainName')]"
-                    },
-                    "DomainUserName": {
-                        "value": "[parameters('DomainAdminUserName')]"
-                    },
-                    "DomainPassword": {
-                        "value": "[parameters('DomainAdminPassword')]"
-                    },
-                    "baseUri": {
-                        "value": "[parameters('artifacts_baseUri')]"
-                    }
-                }
-            }
         }
     ]
 }
