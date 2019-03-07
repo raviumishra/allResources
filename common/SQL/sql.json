@@ -59,14 +59,17 @@
         "omsWorkspaceName": {
             "type": "string"
         },
+        "SQLPrepareModuleURL": {
+            "type": "string"
+        },
+        "SQLPrepareFunction": {
+            "type": "string"
+        },
         "artifacts_baseUri": {
             "type": "string"
         }
     },
-    "variables": {
-        "SQLPrepareModuleURL": "[concat(parameters('artifacts_baseUri'), '/SQLv1/DSC/PrepareSQLServer.ps1.zip')]",
-        "SQLPrepareFunction": "PrepareSQLServer.ps1\\SQLServerPrepareDsc"
-    },
+    "variables": {},
     "resources": [
         {
             "name": "[parameters('StorageAccountName')]",
@@ -243,8 +246,8 @@
                         "typeHandlerVersion": "2.21",
                         "autoUpgradeMinorVersion": true,
                         "settings": {
-                            "modulesURL": "[variables('SQLPrepareModuleURL')]",
-                            "configurationFunction": "[variables('SQLPrepareFunction')]",
+                            "modulesURL": "[parameters('SQLPrepareModuleURL')]",
+                            "configurationFunction": "[parameters('SQLPrepareFunction')]",
                             "properties": {
                                 "domainName": "[parameters('domainName')]",
                                 "adminCreds": {
