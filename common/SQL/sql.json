@@ -32,6 +32,9 @@
         "StorageAccountType": {
             "type": "string"
         },
+        "StorageAccountName": {
+            "type": "string"
+        },
         "numberOfDataDisks": {
             "type": "int"
         },
@@ -245,19 +248,14 @@
                             "properties": {
                                 "domainName": "[parameters('domainName')]",
                                 "adminCreds": {
-                                    "userName": "[parameters('DomainUserName')]",
+                                    "userName": "[parameters('DomainAdminUserName')]",
                                     "password": "privateSettingsRef:adminPassword"
-                                },
-                                "ClusterName": "SQLClusterAG",
-                                "ClusterOwnerNode": "[concat(parameters('virtualmachinename'), '0')]",
-                                "ClusterIP": "[parameters('clusterIpAddress')]",
-                                "witnessStorageBlobEndpoint": "[reference(concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName')), '2016-01-01').primaryEndpoints.blob]",
-                                "witnessStorageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
+                                }
                             }
                         },
                         "protectedSettings": {
                             "items": {
-                                "adminPassword": "[parameters('DomainPassword')]"
+                                "adminPassword": "[parameters('DomainAdminPassword')]"
                             }
                         }
                     }
