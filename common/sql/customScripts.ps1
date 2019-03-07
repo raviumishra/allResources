@@ -285,3 +285,4 @@ ELSE
     {
         Write-Warning -Message 'Mapped volumes do not match.  Please ensure the volumes E, L and S are mapped properly.'
     }
+Restart-Computer -Force
