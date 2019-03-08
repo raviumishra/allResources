@@ -86,7 +86,8 @@
         "availabilitySetId": {
             "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
         },
-        "StorageAccountName": "[concat(parameters('StorageAccountName'),'2')]"
+        "StorageAccountName": "[concat(parameters('StorageAccountName'),'2')]",
+        "AzureFileShareName": "[concat(parameters('AzureFileShareName'),'2')]"
     },
     "resources": [
         {
@@ -265,7 +266,7 @@
                             ]
                         },
                         "protectedSettings": {
-                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File  ',parameters('CustomScriptFileName'),'  -SAName ',variables('StorageAccountName'),'  -SAKey ', listKeys(resourceId(resourceGroup().name,'Microsoft.Storage/storageAccounts',variables('StorageAccountName')),'2015-06-15').key1,'  -AzureFileShareName ',parameters('AzureFileShareName'))]"
+                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File  ',parameters('CustomScriptFileName'),'  -SAName ',variables('StorageAccountName'),'  -SAKey ', listKeys(resourceId(resourceGroup().name,'Microsoft.Storage/storageAccounts',variables('StorageAccountName')),'2015-06-15').key1,'  -AzureFileShareName ',variables('AzureFileShareName'))]"
                         }
                     }
                 }
