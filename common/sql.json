@@ -1,0 +1,240 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "numberofSQLVM": {
+            "type": "int"
+        },
+        "sql_virtualMachineIP": {
+            "type": "array"
+        },
+        "virtualmachineName": {
+            "type": "string"
+        },
+        "sql_SubnetRef": {
+            "type": "string"
+        },
+        "vnetResourceGroup": {
+            "type": "string"
+        },
+        "virtualNetwork": {
+            "type": "string"
+        },
+        "networkInterfaceName": {
+            "type": "string"
+        },
+        "virtualMachineSize": {
+            "type": "string"
+        },
+        "osDiskName": {
+            "type": "string"
+        },
+        "StorageAccountType": {
+            "type": "string"
+        },
+        "StorageAccountName": {
+            "type": "string"
+        },
+        "numberOfDataDisks": {
+            "type": "int"
+        },
+        "DataDiskSize": {
+            "type": "int"
+        },
+        "dataDiskName": {
+            "type": "string"
+        },
+        "domainName": {
+            "type": "string"
+        },
+        "DomainAdminUserName": {
+            "type": "string"
+        },
+        "DomainAdminPassword": {
+            "type": "securestring"
+        },
+        "omsWorkspaceResourceGroup": {
+            "type": "string"
+        },
+        "omsWorkspaceName": {
+            "type": "string"
+        },
+        "sqlCustom_ScriptFilePath": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "name": "[concat(parameters('StorageAccountName'), copyIndex(1))]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "location": "[resourcegroup().location]",
+            "apiVersion": "2018-07-01",
+            "copy": {
+                "name": "storageLoop",
+                "count": 1
+            },
+            "properties": {},
+            "sku": {
+                "name": "[parameters('StorageAccountType')]"
+            },
+            "tags": {}
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(parameters('networkinterfaceName'), copyIndex(1))]",
+            "apiVersion": "2018-05-01",
+            "location": "[resourcegroup().location]",
+            "copy": {
+                "name": "nicLoop",
+                "count": "[parameters('numberofSQLVM')]"
+            },
+            "dependsOn": [],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIpAddress": "[concat(parameters('sql_virtualMachineIP')[copyindex()])]",
+                            "privateIpAddressVersion": "IPv4",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('vnetResourceGroup'),'/providers/Microsoft.Network/virtualNetworks/',parameters('virtualNetwork'),'/subnets/',parameters('sql_SubnetRef'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[concat(parameters('virtualmachineName'), copyIndex(3))]",
+            "apiVersion": "2018-10-01",
+            "location": "[resourcegroup().location]",
+            "copy": {
+                "name": "virtualMachineLoop",
+                "count": "[parameters('numberofSQLVM')]"
+            },
+            "dependsOn": [
+                "nicLoop"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('virtualMachineSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[concat(parameters('virtualmachineName'),copyIndex(3))]",
+                    "adminUsername": "[parameters('DomainAdminUserName')]",
+                    "adminPassword": "[parameters('DomainAdminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftSqlServer",
+                        "offer": "SQL2016SP1-WS2016",
+                        "sku": "Enterprise",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[concat(parameters('osDiskName'), copyIndex(1))]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "[parameters('StorageAccountType')]"
+                        }
+                    },
+                    "copy": [
+                        {
+                            "name": "dataDisks",
+                            "count": "[parameters('numberOfDataDisks')]",
+                            "input": {
+                                "caching": "ReadWrite",
+                                "diskSizeGB": "[parameters('DataDiskSize')]",
+                                "lun": "[copyIndex('dataDisks')]",
+                                "name": "[concat(parameters('dataDiskName'),copyIndex(1), copyIndex('dataDisks'))]",
+                                "createOption": "Empty"
+                            }
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourcegroup().name,'/providers/Microsoft.Network/networkInterfaces/',concat(parameters('networkinterfaceName'), copyIndex(1)))]"
+                        }
+                    ]
+                }
+            },
+            "resources": [
+                {
+                    "type": "extensions",
+                    "name": "domainJoin",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2015-06-15",
+                    "dependson": [
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]",
+                        "customscripts"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "JsonADDomainExtension",
+                        "typeHandlerVersion": "1.3",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "Name": "[parameters('domainName')]",
+                            "OUPath": "",
+                            "User": "[concat(parameters('domainName'), '\\', parameters('DomainAdminUserName'))]",
+                            "Restart": "true",
+                            "Options": "3"
+                        },
+                        "protectedSettings": {
+                            "Password": "[parameters('DomainAdminPassword')]"
+                        }
+                    }
+                },
+                {
+                    "type": "extensions",
+                    "name": "logAnalytics",
+                    "apiVersion": "2015-06-15",
+                    "location": "[resourcegroup().location]",
+                    "dependson": [
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                        "type": "MicrosoftMonitoringAgent",
+                        "typeHandlerVersion": "1.0",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "workspaceId": "[reference(resourceId(parameters('omsWorkspaceResourceGroup'),'Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')), '2015-03-20').customerId]"
+                        },
+                        "protectedSettings": {
+                            "workspaceKey": "[listKeys(resourceId(parameters('omsWorkspaceResourceGroup'),'Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')), '2015-03-20').primarySharedKey]"
+                        }
+                    }
+                },
+                {
+                    "type": "extensions",
+                    "name": "customscripts",
+                    "apiVersion": "2015-06-15",
+                    "location": "[resourcegroup().location]",
+                    "dependson": [
+                        "[concat(parameters('virtualmachineName'), copyIndex(3))]",
+                        "logAnalytics"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "CustomScriptExtension",
+                        "typeHandlerVersion": "1.9",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": [
+                                "[parameters('sqlCustom_ScriptFilePath')]"
+                            ],
+                            "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File customScripts.ps1"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
