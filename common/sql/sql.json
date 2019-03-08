@@ -66,10 +66,14 @@
     "variables": {},
     "resources": [
         {
-            "name": "[parameters('StorageAccountName')]",
+            "name": "[concat(parameters('StorageAccountName'), copyIndex(1))]",
             "type": "Microsoft.Storage/storageAccounts",
             "location": "[resourcegroup().location]",
             "apiVersion": "2018-07-01",
+            "copy": {
+                "name": "storageLoop",
+                "count": 1
+            },
             "properties": {},
             "sku": {
                 "name": "[parameters('StorageAccountType')]"
