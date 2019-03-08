@@ -38,7 +38,7 @@
             "properties": {
                 "sku": {
                     "name": "[parameters('applicationGatewaySize')]",
-                    "tier": "Standard",
+                    "tier": "WAF",
                     "capacity": "[parameters('applicationGatewayInstanceCount')]"
                 },
                 "gatewayIPConfigurations": [
