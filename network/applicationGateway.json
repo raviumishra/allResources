@@ -36,10 +36,6 @@
             "name": "[variables('applicationGatewayName')]",
             "type": "Microsoft.Network/applicationGateways",
             "location": "[resourceGroup().location]",
-            "copy": {
-                "name": "gwloop",
-                "count": 1
-            },
             "dependsOn": [],
             "properties": {
                 "sku": {
