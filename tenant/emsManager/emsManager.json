@@ -30,6 +30,12 @@
         "ems_subnetRef": {
             "type": "string"
         },
+        "vnetResourceGroup": {
+            "type": "string"
+        },
+        "virtualNetwork": {
+            "type": "string"
+        },
         "networkInterfaceName": {
             "type": "string"
         },
@@ -79,7 +85,8 @@
     "variables": {
         "availabilitySetId": {
             "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
-        }
+        },
+        "StorageAccountName": "[concat(parameters('StorageAccountName'),'2')]"
     },
     "resources": [
         {
@@ -97,14 +104,10 @@
             }
         },
         {
-            "name": "[concat(parameters('StorageAccountName'), copyIndex(1))]",
+            "name": "[variables('StorageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
             "location": "[resourcegroup().location]",
             "apiVersion": "2018-07-01",
-            "copy": {
-                "name": "storageLoop",
-                "count": 1
-            },
             "properties": {},
             "sku": {
                 "name": "[parameters('StorageAccountType')]"
@@ -130,7 +133,7 @@
                             "privateIpAddressVersion": "IPv4",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[parameters('ems_subnetRef')]"
+                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('vnetResourceGroup'),'/providers/Microsoft.Network/virtualNetworks/',parameters('virtualNetwork'),'/subnets/',parameters('ems_SubnetRef'))]"
                             }
                         }
                     }
@@ -263,7 +266,7 @@
                             ]
                         },
                         "protectedSettings": {
-                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File  ',parameters('CustomScriptFileName'),'  -SAName ',parameters('StorageAccountName'),'  -SAKey ', listKeys(resourceId(resourceGroup().name,'Microsoft.Storage/storageAccounts',parameters('StorageAccountName')),'2015-06-15').key1,'  -AzureFileShareName ',parameters('AzureFileShareName'))]"
+                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File  ',parameters('CustomScriptFileName'),'  -SAName ',variables('StorageAccountName'),'  -SAKey ', listKeys(resourceId(resourceGroup().name,'Microsoft.Storage/storageAccounts',variables('StorageAccountName')),'2015-06-15').key1,'  -AzureFileShareName ',parameters('AzureFileShareName'))]"
                         }
                     }
                 }
