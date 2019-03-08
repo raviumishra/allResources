@@ -27,13 +27,19 @@
             "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+        "applicationGatewayName": "[concat(parameters('applicationGatewayName'),'1')]"
+    },
     "resources": [
         {
             "apiVersion": "2017-06-01",
-            "name": "[parameters('applicationGatewayName')]",
+            "name": "[variables('applicationGatewayName')]",
             "type": "Microsoft.Network/applicationGateways",
             "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "gwloop",
+                "count": 1
+            },
             "dependsOn": [],
             "properties": {
                 "sku": {
@@ -92,10 +98,10 @@
                         "name": "appGatewayHttpListener",
                         "properties": {
                             "FrontendIpConfiguration": {
-                                "Id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGatewayName')), '/frontendIPConfigurations/appGatewayFrontendIP')]"
+                                "Id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('applicationGatewayName')), '/frontendIPConfigurations/appGatewayFrontendIP')]"
                             },
                             "FrontendPort": {
-                                "Id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGatewayName')), '/frontendPorts/appGatewayFrontendPort')]"
+                                "Id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('applicationGatewayName')), '/frontendPorts/appGatewayFrontendPort')]"
                             },
                             "Protocol": "Http",
                             "SslCertificate": null
@@ -108,13 +114,13 @@
                         "properties": {
                             "RuleType": "Basic",
                             "httpListener": {
-                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGatewayName')), '/httpListeners/appGatewayHttpListener')]"
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('applicationGatewayName')), '/httpListeners/appGatewayHttpListener')]"
                             },
                             "backendAddressPool": {
                                 "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGatewayName')), '/backendAddressPools/appGatewayBackendPool')]"
                             },
                             "backendHttpSettings": {
-                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGatewayName')), '/backendHttpSettingsCollection/appGatewayBackendHttpSettings')]"
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('applicationGatewayName')), '/backendHttpSettingsCollection/appGatewayBackendHttpSettings')]"
                             }
                         }
                     }
